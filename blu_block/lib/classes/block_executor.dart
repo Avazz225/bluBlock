@@ -121,14 +121,17 @@ class BlockExecutor extends ChangeNotifier{
       }
     // is not over night
     } else {
-      print(secondsSinceMidnight);
-      print(_workWindowStartSecs);
-      print(_workWindowEndSecs);
-      if (secondsSinceMidnight > _workWindowStartSecs && secondsSinceMidnight < _workWindowEndSecs){
+      if (secondsSinceMidnight >= _workWindowStartSecs && secondsSinceMidnight < _workWindowEndSecs){
         return 0;
-      } else {
-        return _workWindowStartSecs - secondsSinceMidnight;
-      }
+      } else 
+        if(secondsSinceMidnight < _workWindowStart){
+          // same day 
+          return _workWindowStartSecs - secondsSinceMidnight;
+        } else {
+          // next dayv
+          return (86400 - secondsSinceMidnight) + _workWindowStart;
+        }
+      } 
     }
   }
 
