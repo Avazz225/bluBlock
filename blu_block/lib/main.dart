@@ -3,13 +3,16 @@ import 'package:blu_block/classes/block_executor.dart';
 import 'package:blu_block/ui/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'classes/block_progress.dart';
 import 'classes/settings.dart';
 import 'classes/url.dart';
 
 void main() {
-  runApp(MainApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  runApp(const MainApp());
 }
 
 class MainApp extends StatefulWidget {
@@ -60,4 +63,12 @@ class MainAppState extends State<MainApp> {
       )
     );
   }
+}
+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) {
+    // Your background task logic goes here
+    BlockExecutor().blockScheduler();
+    return Future.value(true);
+  });
 }

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../classes/block_progress.dart';
 import '../components/background.dart';
 import '../components/circular_progress_painter.dart';
+import 'list_page.dart';
 
 class HomePage extends StatefulWidget  {
   const HomePage({super.key});
@@ -33,6 +34,12 @@ class _HomePageState extends State<HomePage> {
           PopupMenuButton<String>(
             onSelected: (String result) {
               switch (result) {
+                case 'list':
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ListPage()),
+                  );
+                  break;
                 case 'settings':
                   Navigator.push(
                     context,
@@ -54,6 +61,10 @@ class _HomePageState extends State<HomePage> {
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'list',
+                child: Text('Accountliste'),
+              ),
               const PopupMenuItem<String>(
                 value: 'settings',
                 child: Text('Einstellungen'),

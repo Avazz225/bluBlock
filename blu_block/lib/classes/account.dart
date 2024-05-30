@@ -10,11 +10,12 @@ class Account{
   final String accountName;
   final int platformId;
   final int categoryId;
+  bool ignored;
   bool blocked;
   final DatabaseHelper _db = DatabaseHelper();
   final Url _url = Url();
   
-  Account(this.accountId, this.accountName, this.platformId, this.categoryId, this.blocked);
+  Account(this.accountId, this.accountName, this.platformId, this.categoryId, this.blocked, this.ignored);
 
   Future<bool> block(BlockProgress progressTracker) async {
     AutomatedWebView webView = AutomatedWebView('${await(_getBaseUrl())}/$accountId', await _getBlockLogic());
@@ -44,5 +45,11 @@ class Account{
       return instaBlockLogic;
     }
     return "";
+  }
+
+  toggleIgnored(){
+    ignored = !ignored;
+    _db.updateDB('account', {'ignored': (ignored)?1:0}, 'account_id = ? AND account_name = ? AND platform_id = ? AND category_id = ?', [accountId, accountName, platformId, categoryId]);
+    BlockProgress().updateValues();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:blu_block/classes/account_overview.dart';
 import 'package:blu_block/classes/block_progress.dart';
 import 'package:blu_block/classes/cdn_file_reader.dart';
 import 'package:blu_block/classes/database.dart';
@@ -9,6 +10,7 @@ class ImportList{
   final CDNFileReader _reader = CDNFileReader();
   final BlockProgress progress = BlockProgress();
   final Settings settings = Settings();
+  final AccountOverview overview = AccountOverview();
 
   Future<int> executeImport() async {
     Map targetPlatforms = (await _db.readDB("configuration", ['facebook_logged_in','insta_logged_in','tiktok_logged_in','x_logged_in'], '1 = ?', [1], 'insta_logged_in ASC', 1))[0];
@@ -27,6 +29,8 @@ class ImportList{
     DateTime now = DateTime.now();
     settings.updateValue("lastFileRefresh", now.toString());
     progress.updateValues();
+    overview.initialize();
+
     return _importedRows;
   }
 }

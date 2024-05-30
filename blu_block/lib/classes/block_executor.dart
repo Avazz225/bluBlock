@@ -3,6 +3,7 @@ import 'package:blu_block/classes/database.dart';
 import 'package:blu_block/classes/settings.dart';
 import 'package:blu_block/helpers/random_wait_time.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'account.dart';
 import 'block_progress.dart';
@@ -29,7 +30,14 @@ class BlockExecutor extends ChangeNotifier{
   toggleBlockActive(){
     _blockActive = !_blockActive;
     if (_blockActive){
-      _blockScheduler();
+      _waitTimeSeconds = _defineWorkingWindow();
+      if (_waitTimeSeconds == 0){
+        _waitTimeSeconds = _getWaitTime();
+      }
+      String taskName = "blockProcess_${_genrateRandomString(10)}";
+      Workmanager().registerOneOffTask(taskName, "bluBlock_blockScheduling", initialDelay: Duration(seconds: _waitTimeSeconds));
+    } else {
+      Workmanager().cancelAll();
     }
     notifyListeners();
   }
@@ -42,30 +50,32 @@ class BlockExecutor extends ChangeNotifier{
     return {'total_actions':_totalActions, 'succeeded':_succeededActions, 'percentage':(_succeededActions/_totalActions)};
   }
 
-  _blockScheduler() async {
-    while(_blockActive){
-      //preparation and delaying
-      await Future.delayed(Duration(seconds: _waitTimeSeconds), () async {
-        int secondsToWindow = _defineWorkingWindow();
-        await Future.delayed(Duration(seconds: secondsToWindow), ()  async {
-          //do not execute block if execution was stopped while waiting
-          if(_blockActive){
-            //actual block execution
-            _getBatchSize();
-            await _getNewList();
-            //only execute blocks and get waitTime if account list is not empty
-            if (_accounts.isNotEmpty){
-              await _executeBlocks();
-              //at the end, so the first batch is performed immediately
-              _getWaitTime();
-            } else {
-              // if account list is empty: stop execution
-              toggleBlockActive();
-            }
-          }
-        });
-      });
+  blockScheduler() async {
+    if(_blockActive){
+      //block execution
+      _getBatchSize();
+      await _getNewList();
+      //only execute blocks and get waitTime if account list is not empty
+      if (_accounts.isNotEmpty){
+        await _executeBlocks();
+        _waitTimeSeconds = _defineWorkingWindow();
+        if (_waitTimeSeconds == 0){
+          _waitTimeSeconds = _getWaitTime();
+        }
+        String taskName = "blockProcess_${_genrateRandomString(10)}";
+        Workmanager().registerOneOffTask(taskName, "bluBlock_blockScheduling", initialDelay: Duration(seconds: _waitTimeSeconds));
+      } else {
+        // if account list is empty: stop execution
+        toggleBlockActive();
+      }
     }
+  }
+
+  _genrateRandomString(int length){
+    const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return  String.fromCharCodes(Iterable.generate(
+      length, (_) => chars.codeUnitAt(Random().nextInt(chars.length))
+    ));
   }
 
   _executeBlocks() async {
@@ -94,9 +104,9 @@ class BlockExecutor extends ChangeNotifier{
 
     for (int i = 0; i<loginStates.length; i++){
       if (loginStates[i]){
-        List accounts = await _db.readDB('account', ['account_id', 'account_name', 'blocked', 'category_id', 'platform_id'], 'category_id  <= ? AND blocked=0 AND block_attempt=0 AND platform_id = ?', [maxBlockLevel, i+1], 'category_id ASC, RANDOM()', _batchSize);
+        List accounts = await _db.readDB('account', ['account_id', 'account_name', 'blocked', 'ignored', 'category_id', 'platform_id'], 'category_id  <= ? AND blocked=0 AND block_attempt=0 AND platform_id = ? AND ignored=0', [maxBlockLevel, i+1], 'category_id ASC, RANDOM()', _batchSize);
         for (final account in accounts){
-          _accounts.add(Account(account['account_id'], account['account_name'], account['platform_id'], account['category_id'], account['blocked'] == 1));
+          _accounts.add(Account(account['account_id'], account['account_name'], account['platform_id'], account['category_id'], account['blocked'] == 1, account['ignored'] == 1));
         }
       }
     }
@@ -124,15 +134,14 @@ class BlockExecutor extends ChangeNotifier{
       if (secondsSinceMidnight >= _workWindowStartSecs && secondsSinceMidnight < _workWindowEndSecs){
         return 0;
       } else 
-        if(secondsSinceMidnight < _workWindowStart){
-          // same day 
+        if (secondsSinceMidnight < _workWindowStartSecs){
+          // same day
           return _workWindowStartSecs - secondsSinceMidnight;
         } else {
           // next dayv
-          return (86400 - secondsSinceMidnight) + _workWindowStart;
+          return (86400 - _workWindowStartSecs) + _workWindowStartSecs;
         }
-      } 
-    }
+      }
   }
 
   BlockExecutor._internal();

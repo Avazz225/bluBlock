@@ -21,9 +21,9 @@ class BlockProgress extends ChangeNotifier {
   }
 
   updateValues() async {
-    totalCount = await _db.getCount('account', ['COUNT(*)'], '1 = ?', [1], 'id ASC', 1);
-    blockedCount = await _db.getCount('account', ['COUNT(*)'], 'blocked = ?', [1], 'id ASC', 1);
-    missedCount = await _db.getCount('account', ['COUNT(*)'], 'block_attempt = ? AND blocked = ?', [1, 0], 'id ASC', 1);
+    totalCount = await _db.getCount('account', ['COUNT(*)'], 'ignored = ?', [0], 'id ASC', 1);
+    blockedCount = await _db.getCount('account', ['COUNT(*)'], 'blocked = ? AND ignored=0', [1], 'id ASC', 1);
+    missedCount = await _db.getCount('account', ['COUNT(*)'], 'block_attempt = ? AND blocked = ? AND ignored=0', [1, 0], 'id ASC', 1);
     notifyListeners();
   }
   

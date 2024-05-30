@@ -18,7 +18,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'blublock_database2.db');
+    String path = join(await getDatabasesPath(), 'blublock_database3.db');
     return await openDatabase(
       path,
       version: 2,
@@ -51,6 +51,7 @@ class DatabaseHelper {
           "account_name"	TEXT NOT NULL,
           "blocked"	INTEGER NOT NULL DEFAULT 0,
           "block_attempt" INTEGER NOT NULL DEFAULT 0,
+          "ignored" INTEGER NOT NULL DEFAULT 0,
           "category_id"	INTEGER NOT NULL,
           "platform_id"	INTEGER NOT NULL,
           PRIMARY KEY("id")
@@ -61,8 +62,8 @@ class DatabaseHelper {
       CREATE TABLE IF NOT EXISTS "configuration" (
         "block_level"	INTEGER NOT NULL DEFAULT 2,
         "cloudfront_url"	TEXT UNIQUE,
-        "wait_seconds_min"	INTEGER NOT NULL DEFAULT 300,
-        "wait_seconds_max"	INTEGER NOT NULL DEFAULT 900,
+        "wait_seconds_min"	INTEGER NOT NULL DEFAULT 900,
+        "wait_seconds_max"	INTEGER NOT NULL DEFAULT 1200,
         "max_batch_size"	INTEGER NOT NULL DEFAULT 5,
         "work_window_start"	INTEGER NOT NULL DEFAULT 79200,
         "work_window_end"	INTEGER NOT NULL DEFAULT 18000,
