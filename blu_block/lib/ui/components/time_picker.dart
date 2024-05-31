@@ -1,4 +1,4 @@
-import 'package:blu_block/classes/settings.dart';
+import 'package:BluBlock/classes/settings.dart';
 import 'package:flutter/material.dart';
 
 class TimePickerComponent extends StatefulWidget {

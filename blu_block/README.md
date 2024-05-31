@@ -1,3 +1,3 @@
-# blu_block
+# BluBlock
 
 A new Flutter project.

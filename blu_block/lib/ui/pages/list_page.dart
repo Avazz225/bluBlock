@@ -1,5 +1,5 @@
-import 'package:blu_block/classes/account_overview.dart';
-import 'package:blu_block/ui/components/button.dart';
+import 'package:BluBlock/classes/account_overview.dart';
+import 'package:BluBlock/ui/components/button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

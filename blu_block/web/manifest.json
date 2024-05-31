@@ -1,6 +1,6 @@
 {
-    "name": "blu_block",
-    "short_name": "blu_block",
+    "name": "BluBlock",
+    "short_name": "BluBlock",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

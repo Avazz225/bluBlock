@@ -1,5 +1,5 @@
-import 'package:blu_block/classes/block_progress.dart';
-import 'package:blu_block/classes/settings.dart';
+import 'package:BluBlock/classes/block_progress.dart';
+import 'package:BluBlock/classes/settings.dart';
 import 'package:flutter/material.dart';
 
 class DropdownComponent extends StatefulWidget {

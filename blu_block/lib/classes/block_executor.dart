@@ -1,12 +1,11 @@
 import 'dart:math';
-import 'package:blu_block/classes/database.dart';
-import 'package:blu_block/classes/settings.dart';
-import 'package:blu_block/helpers/random_wait_time.dart';
+import 'package:BluBlock/classes/database.dart';
+import 'package:BluBlock/classes/settings.dart';
+import 'package:BluBlock/helpers/random_wait_time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'account.dart';
-import 'block_progress.dart';
 
 class BlockExecutor extends ChangeNotifier{
   static final BlockExecutor _instance = BlockExecutor._internal();
@@ -89,7 +88,7 @@ class BlockExecutor extends ChangeNotifier{
     for (final account in _accounts){
       bool res = false;
       try{
-        bool res = await account.block();
+        res = await account.block();
       } catch (e) {
         res = false;
       }

@@ -1,6 +1,6 @@
-import 'package:blu_block/classes/account_overview.dart';
-import 'package:blu_block/classes/block_executor.dart';
-import 'package:blu_block/ui/pages/home.dart';
+import 'package:BluBlock/classes/account_overview.dart';
+import 'package:BluBlock/classes/block_executor.dart';
+import 'package:BluBlock/ui/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
@@ -11,7 +11,10 @@ import 'classes/url.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(callbackDispatcher);
+  Workmanager().initialize(
+      callbackDispatcher,
+      isInDebugMode: false
+  );
   runApp(const MainApp());
 }
 
@@ -58,7 +61,7 @@ class MainAppState extends State<MainApp> {
         darkTheme: ThemeData(
           brightness: Brightness.dark,
         ),
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.system,
         home: const HomePage(),
       )
     );
@@ -67,16 +70,12 @@ class MainAppState extends State<MainApp> {
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    try {
-      debugPrint("Starting blocking task...");
-      BlockExecutor scheduler = BlockExecutor();
-      await scheduler.initialize();
-      scheduler.changeBlockActiveSilent();
-      await scheduler.blockScheduler();
-      debugPrint("Finished blocking task...");
-      return Future.value(true);
-    } catch (e) {
-      return Future.value(false);
-    }
+    debugPrint("Starting blocking task...");
+    BlockExecutor scheduler = BlockExecutor();
+    await scheduler.initialize();
+    scheduler.changeBlockActiveSilent();
+    await scheduler.blockScheduler();
+    debugPrint("Finished blocking task...");
+    return Future.value(true);
   });
 }

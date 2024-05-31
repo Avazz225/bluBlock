@@ -1,9 +1,10 @@
-import 'package:blu_block/classes/block_executor.dart';
-import 'package:blu_block/ui/components/button.dart';
-import 'package:blu_block/ui/pages/data_security.dart';
-import 'package:blu_block/ui/pages/infos.dart';
-import 'package:blu_block/ui/pages/settings_page.dart';
+import 'package:BluBlock/classes/block_executor.dart';
+import 'package:BluBlock/ui/components/button.dart';
+import 'package:BluBlock/ui/pages/data_security.dart';
+import 'package:BluBlock/ui/pages/infos.dart';
+import 'package:BluBlock/ui/pages/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../classes/block_progress.dart';
@@ -22,6 +23,18 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  }
+
+  @override
+  dispose(){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   @override

@@ -1,13 +1,13 @@
-import 'package:blu_block/classes/database.dart';
-import 'package:blu_block/classes/import_list.dart';
-import 'package:blu_block/classes/settings.dart';
-import 'package:blu_block/classes/url.dart';
-import 'package:blu_block/js_logic/insta_logic.dart';
-import 'package:blu_block/ui/components/background.dart';
-import 'package:blu_block/ui/components/button.dart';
-import 'package:blu_block/ui/components/dropdown.dart';
-import 'package:blu_block/ui/pages/login_web_view.dart';
-import 'package:blu_block/ui/components/time_picker.dart';
+import 'package:BluBlock/classes/database.dart';
+import 'package:BluBlock/classes/import_list.dart';
+import 'package:BluBlock/classes/settings.dart';
+import 'package:BluBlock/classes/url.dart';
+import 'package:BluBlock/js_logic/insta_logic.dart';
+import 'package:BluBlock/ui/components/background.dart';
+import 'package:BluBlock/ui/components/button.dart';
+import 'package:BluBlock/ui/components/dropdown.dart';
+import 'package:BluBlock/ui/pages/login_web_view.dart';
+import 'package:BluBlock/ui/components/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -149,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Wartezeit in Minuten"),
+                          const Text("Wartezeit in Minuten (min 5)"),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -214,7 +214,9 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
   _dummyFunction(){
-    print("Dummy executed");
+    String title = "Noch nicht vorhanden";
+    String msg = "Diese Funktion steht bisher nur für Instagram bereit.";
+    showMessage(context, msg, title);
   }
 
   _startListRefresh() async {

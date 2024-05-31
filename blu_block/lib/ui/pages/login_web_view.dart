@@ -4,14 +4,12 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../classes/database.dart';
 import '../../classes/settings.dart';
 
 class LoginWebView extends StatelessWidget {
   final String initialUrl;
   final String jsLogic;
   final String platform;
-  final DatabaseHelper _db = DatabaseHelper();
 
   LoginWebView({super.key, required this.initialUrl, required this.jsLogic, required this.platform});
 
@@ -44,7 +42,7 @@ class LoginWebView extends StatelessWidget {
                 targetRow = "facebook_logged_in";
               }
               settings.updateValue(targetRow, true);
-              Navigator.pop(context);
+              //Navigator.pop(context);
             }
           }
         },

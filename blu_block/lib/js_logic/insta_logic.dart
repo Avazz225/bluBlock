@@ -1,4 +1,4 @@
-import 'package:blu_block/helpers/random_wait_time.dart';
+import 'package:BluBlock/helpers/random_wait_time.dart';
 
 String instaBlockLogic = '''
 function executeBlock(){

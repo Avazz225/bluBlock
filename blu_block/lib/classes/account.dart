@@ -1,7 +1,7 @@
-import 'package:blu_block/classes/automated_web_view.dart';
-import 'package:blu_block/classes/database.dart';
-import 'package:blu_block/classes/url.dart';
-import 'package:blu_block/js_logic/insta_logic.dart';
+import 'package:BluBlock/classes/automated_web_view.dart';
+import 'package:BluBlock/classes/database.dart';
+import 'package:BluBlock/classes/url.dart';
+import 'package:BluBlock/js_logic/insta_logic.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'block_progress.dart';

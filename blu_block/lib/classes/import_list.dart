@@ -1,8 +1,8 @@
-import 'package:blu_block/classes/account_overview.dart';
-import 'package:blu_block/classes/block_progress.dart';
-import 'package:blu_block/classes/cdn_file_reader.dart';
-import 'package:blu_block/classes/database.dart';
-import 'package:blu_block/classes/settings.dart';
+import 'package:BluBlock/classes/account_overview.dart';
+import 'package:BluBlock/classes/block_progress.dart';
+import 'package:BluBlock/classes/cdn_file_reader.dart';
+import 'package:BluBlock/classes/database.dart';
+import 'package:BluBlock/classes/settings.dart';
 
 class ImportList{
   int _importedRows = 0;

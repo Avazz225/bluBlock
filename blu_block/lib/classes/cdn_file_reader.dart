@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:blu_block/classes/database.dart';
-import 'package:blu_block/classes/url.dart';
+import 'package:BluBlock/classes/database.dart';
+import 'package:BluBlock/classes/url.dart';
 import 'package:http/http.dart' as http;
 
 class CDNFileReader {

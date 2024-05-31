@@ -1,4 +1,4 @@
-import 'package:blu_block/classes/database.dart';
+import 'package:BluBlock/classes/database.dart';
 
 class Url{
   static final Url _instance = Url._internal();

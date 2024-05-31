@@ -1,4 +1,4 @@
-import 'package:blu_block/classes/database.dart';
+import 'package:BluBlock/classes/database.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'account.dart';
