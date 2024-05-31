@@ -17,6 +17,7 @@ dependencies:
   intl: ^0.17.0
   provider: ^6.0.0
   workmanager: ^0.5.2
+  flutter_inappwebview: ^6.0.0
 
 dev_dependencies:
   flutter_test:

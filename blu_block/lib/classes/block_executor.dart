@@ -80,7 +80,7 @@ class BlockExecutor extends ChangeNotifier{
 
   _executeBlocks() async {
     for (final account in _accounts){
-      bool res = await account.block(_progressTracker);
+      bool res = await account.block();
       _totalActions++;
       if (res){
         _succeededActions++;

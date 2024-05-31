@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                   onClick: () => {
                     blockExecutor.toggleBlockActive()
                   }
-                  )
+                )
               ],
             ),
           ),

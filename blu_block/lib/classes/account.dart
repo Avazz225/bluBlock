@@ -2,6 +2,7 @@ import 'package:blu_block/classes/automated_web_view.dart';
 import 'package:blu_block/classes/database.dart';
 import 'package:blu_block/classes/url.dart';
 import 'package:blu_block/js_logic/insta_logic.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'block_progress.dart';
 
@@ -14,12 +15,16 @@ class Account{
   bool blocked;
   final DatabaseHelper _db = DatabaseHelper();
   final Url _url = Url();
+  final BlockProgress progressTracker = BlockProgress();
   
   Account(this.accountId, this.accountName, this.platformId, this.categoryId, this.blocked, this.ignored);
 
-  Future<bool> block(BlockProgress progressTracker) async {
-    AutomatedWebView webView = AutomatedWebView('${await(_getBaseUrl())}/$accountId', await _getBlockLogic());
-    bool blockResult = await webView.performAutomatedActions();
+
+  Future<bool> block() async {
+    bool blockResult = await AutomatedWebView(url: '${await(_getBaseUrl())}$accountId', jsActions: await _getBlockLogic()).performAutomatedActions();
+    print("------------------------------------------");
+    print("Automated WebView returned: $blockResult");
+    print("------------------------------------------");
     if (blockResult){
       _updateBlockState();
       progressTracker.updateBlockedCount(1);
