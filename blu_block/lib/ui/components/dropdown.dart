@@ -1,3 +1,4 @@
+import 'package:blu_block/classes/block_progress.dart';
 import 'package:blu_block/classes/settings.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class DropdownComponent extends StatefulWidget {
 class _DropdownComponentState extends State<DropdownComponent> {
   late int _selectedValue;
   final Settings settings = Settings();
+  final BlockProgress progress = BlockProgress();
   List options = ["Politiker/-in", "Influencer/-in", "Einzelperson"];
 
   @override
@@ -29,6 +31,7 @@ class _DropdownComponentState extends State<DropdownComponent> {
         setState(() {
           _selectedValue = newValue!;
           settings.updateValue("blockLevel", newValue);
+          progress.updateValues();
         });
       },
       items: <int>[1, 2, 3]

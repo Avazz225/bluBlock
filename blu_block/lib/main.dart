@@ -11,7 +11,7 @@ import 'classes/url.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+  Workmanager().initialize(callbackDispatcher);
   runApp(const MainApp());
 }
 
@@ -66,9 +66,17 @@ class MainAppState extends State<MainApp> {
 }
 
 void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) {
-    // Your background task logic goes here
-    BlockExecutor().blockScheduler();
-    return Future.value(true);
+  Workmanager().executeTask((task, inputData) async {
+    try {
+      debugPrint("Starting blocking task...");
+      BlockExecutor scheduler = BlockExecutor();
+      await scheduler.initialize();
+      scheduler.changeBlockActiveSilent();
+      await scheduler.blockScheduler();
+      debugPrint("Finished blocking task...");
+      return Future.value(true);
+    } catch (e) {
+      return Future.value(false);
+    }
   });
 }

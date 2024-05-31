@@ -21,10 +21,13 @@ class BlockExecutor extends ChangeNotifier{
   bool _blockActive = false;
   final Settings _settings = Settings();
   final DatabaseHelper _db = DatabaseHelper();
-  final BlockProgress _progressTracker = BlockProgress();
 
   factory BlockExecutor() {
     return _instance;
+  }
+
+  Future<void> initialize() async {
+    await _settings.initialize();
   }
 
   toggleBlockActive(){
@@ -32,7 +35,7 @@ class BlockExecutor extends ChangeNotifier{
     if (_blockActive){
       _waitTimeSeconds = _defineWorkingWindow();
       if (_waitTimeSeconds == 0){
-        _waitTimeSeconds = _getWaitTime();
+        _getWaitTime();
       }
       String taskName = "blockProcess_${_genrateRandomString(10)}";
       Workmanager().registerOneOffTask(taskName, "bluBlock_blockScheduling", initialDelay: Duration(seconds: _waitTimeSeconds));
@@ -40,6 +43,10 @@ class BlockExecutor extends ChangeNotifier{
       Workmanager().cancelAll();
     }
     notifyListeners();
+  }
+
+  changeBlockActiveSilent(){
+    _blockActive = !_blockActive;
   }
 
   bool getBlockActive(){
@@ -80,7 +87,12 @@ class BlockExecutor extends ChangeNotifier{
 
   _executeBlocks() async {
     for (final account in _accounts){
-      bool res = await account.block();
+      bool res = false;
+      try{
+        bool res = await account.block();
+      } catch (e) {
+        res = false;
+      }
       _totalActions++;
       if (res){
         _succeededActions++;
@@ -112,7 +124,7 @@ class BlockExecutor extends ChangeNotifier{
     }
   }
 
-  _getWorkingWindow() async {
+  _getWorkingWindow() {
     _workWindowStartSecs = _settings.workWindowStart;
     _workWindowEndSecs = _settings.workWindowEnd;
   }
