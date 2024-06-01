@@ -34,8 +34,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final settings = Provider.of<Settings>(context);
     final TextEditingController maxBatchSizeController = TextEditingController(text: "${settings.maxBatchSize}");
-    final TextEditingController minWaitController = TextEditingController(text: "${(settings.waitSecondsMin/60).round()}");
-    final TextEditingController maxWaitController = TextEditingController(text: "${(settings.waitSecondsMax/60).round()}");
+    final TextEditingController minWaitController = TextEditingController(text: "${(settings.waitSecondsMin).round()}");
+    final TextEditingController maxWaitController = TextEditingController(text: "${(settings.waitSecondsMax).round()}");
 
     return(
       Scaffold(
@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           DropdownComponent(defaultValue: settings.blockLevel)
                         ]
                       ),
-                      Row(
+                      /*Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("Arbeitszeit"),
@@ -113,7 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             )
                           ),
                         ],
-                      ),
+                      ),*/
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -149,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Wartezeit in Minuten (min 15)"),
+                          const Text("Wartezeit in Sekunden (min 15)"),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -166,7 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                   onEditingComplete: () {
                                     int newValue = int.tryParse(minWaitController.text) ?? settings.waitSecondsMin;
-                                    settings.updateValue('waitSecondsMin', newValue*60);
+                                    settings.updateValue('waitSecondsMin', newValue);
                                     FocusScope.of(context).unfocus(); // Schließt die Tastatur
                                   },
                                 ),
@@ -186,7 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                   onEditingComplete: () {
                                     int newValue = int.tryParse(maxWaitController.text) ?? settings.waitSecondsMax;
-                                    settings.updateValue('waitSecondsMax', newValue*60);
+                                    settings.updateValue('waitSecondsMax', newValue);
                                     FocusScope.of(context).unfocus(); // Schließt die Tastatur
                                   },
                                 ),

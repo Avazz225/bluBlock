@@ -3,7 +3,6 @@ import 'package:BluBlock/classes/database.dart';
 import 'package:BluBlock/classes/settings.dart';
 import 'package:BluBlock/helpers/random_wait_time.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:workmanager/workmanager.dart';
 
 import 'account.dart';
 
@@ -13,8 +12,10 @@ class BlockExecutor extends ChangeNotifier{
   List<Account> _accounts = [];
   int _waitTimeSeconds = 0;
   int _batchSize = 0;
+  /*
   int _workWindowStartSecs = 0;
   int _workWindowEndSecs = 0;
+  */
   int _totalActions = 0;
   int _succeededActions = 0;
   bool _blockActive = false;
@@ -32,15 +33,7 @@ class BlockExecutor extends ChangeNotifier{
   toggleBlockActive(){
     _blockActive = !_blockActive;
     if (_blockActive){
-      _waitTimeSeconds = _defineWorkingWindow();
-      if (_waitTimeSeconds == 0){
-        blockScheduler();
-      } else {
-        String taskName = "blockProcess_${_genrateRandomString(10)}";
-        Workmanager().registerOneOffTask(taskName, "bluBlock_blockScheduling", initialDelay: Duration(seconds: _waitTimeSeconds));
-      }
-    } else {
-      Workmanager().cancelAll();
+      blockScheduler();
     }
     notifyListeners();
   }
@@ -58,31 +51,21 @@ class BlockExecutor extends ChangeNotifier{
   }
 
   blockScheduler() async {
-    if(_blockActive){
+    while(_blockActive){
+      print("New BATCH");
       //block execution
       _getBatchSize();
       await _getNewList();
       //only execute blocks and get waitTime if account list is not empty
       if (_accounts.isNotEmpty){
         await _executeBlocks();
-        _waitTimeSeconds = _defineWorkingWindow();
-        if (_waitTimeSeconds == 0){
-          _waitTimeSeconds = _getWaitTime();
-        }
-        String taskName = "blockProcess_${_genrateRandomString(10)}";
-        Workmanager().registerOneOffTask(taskName, "bluBlock_blockScheduling", initialDelay: Duration(seconds: _waitTimeSeconds));
+        _getWaitTime();
+        await Future.delayed(Duration(seconds: _waitTimeSeconds));
       } else {
         // if account list is empty: stop execution
         toggleBlockActive();
       }
     }
-  }
-
-  _genrateRandomString(int length){
-    const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    return  String.fromCharCodes(Iterable.generate(
-      length, (_) => chars.codeUnitAt(Random().nextInt(chars.length))
-    ));
   }
 
   _executeBlocks() async {
@@ -124,7 +107,7 @@ class BlockExecutor extends ChangeNotifier{
     }
   }
 
-  _getWorkingWindow() {
+/*_getWorkingWindow() {
     _workWindowStartSecs = _settings.workWindowStart;
     _workWindowEndSecs = _settings.workWindowEnd;
   }
@@ -154,7 +137,7 @@ class BlockExecutor extends ChangeNotifier{
           return (86400 - _workWindowStartSecs) + _workWindowStartSecs;
         }
       }
-  }
+  }*/
 
   BlockExecutor._internal();
 }

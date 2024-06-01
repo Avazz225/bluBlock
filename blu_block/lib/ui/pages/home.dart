@@ -1,10 +1,8 @@
-import 'package:BluBlock/classes/account_overview.dart';
 import 'package:BluBlock/classes/block_executor.dart';
 import 'package:BluBlock/ui/components/button.dart';
 import 'package:BluBlock/ui/pages/data_security.dart';
 import 'package:BluBlock/ui/pages/infos.dart';
 import 'package:BluBlock/ui/pages/settings_page.dart';
-import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -23,27 +21,11 @@ class HomePage extends StatefulWidget  {
 
 class _HomePageState extends State<HomePage> {
   BlockProgress progressTracker = BlockProgress();
-  BlockExecutor executor = BlockExecutor();
-  AccountOverview overview = AccountOverview();
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    _initAutoStart();
-  }
-
-  Future<void> _initAutoStart() async {
-    try {
-      bool? test = await (isAutoStartAvailable);
-      print(test);
-      if (test == true){
-        await getAutoStartPermission();
-      }
-    } on PlatformException catch (e) {
-      debugPrint(e as String?);
-    }
-    if (!mounted) return;
   }
 
   @override
@@ -55,17 +37,6 @@ class _HomePageState extends State<HomePage> {
       DeviceOrientation.portraitDown,
     ]);
     super.dispose();
-  }
-
-  _refreshProgressPeriodically() async {
-    bool blockActive = true;
-    while(blockActive){
-      await Future.delayed(const Duration(seconds: 15));
-      progressTracker.updateValues();
-      overview.initialize();
-
-      blockActive = executor.getBlockActive();
-    }
   }
 
   @override
@@ -147,9 +118,6 @@ class _HomePageState extends State<HomePage> {
                   text: (blockExecutor.getBlockActive()?"Blocken stoppen":"Blocken starten"),
                   onClick: () => {
                     blockExecutor.toggleBlockActive(),
-                    if (blockExecutor.getBlockActive()){
-                      _refreshProgressPeriodically()
-                    }
                   }
                 )
               ],

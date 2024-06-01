@@ -62,8 +62,8 @@ class DatabaseHelper {
       CREATE TABLE IF NOT EXISTS "configuration" (
         "block_level"	INTEGER NOT NULL DEFAULT 2,
         "cloudfront_url"	TEXT UNIQUE,
-        "wait_seconds_min"	INTEGER NOT NULL DEFAULT 900,
-        "wait_seconds_max"	INTEGER NOT NULL DEFAULT 1200,
+        "wait_seconds_min"	INTEGER NOT NULL DEFAULT 20,
+        "wait_seconds_max"	INTEGER NOT NULL DEFAULT 30,
         "max_batch_size"	INTEGER NOT NULL DEFAULT 5,
         "work_window_start"	INTEGER NOT NULL DEFAULT 79200,
         "work_window_end"	INTEGER NOT NULL DEFAULT 18000,
