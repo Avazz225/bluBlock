@@ -1,3 +1,4 @@
+import 'package:BluBlock/classes/account_overview.dart';
 import 'package:BluBlock/classes/block_executor.dart';
 import 'package:BluBlock/ui/components/button.dart';
 import 'package:BluBlock/ui/pages/data_security.dart';
@@ -5,7 +6,6 @@ import 'package:BluBlock/ui/pages/infos.dart';
 import 'package:BluBlock/ui/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 
 import '../../classes/block_progress.dart';
@@ -23,6 +23,7 @@ class HomePage extends StatefulWidget  {
 class _HomePageState extends State<HomePage> {
   BlockProgress progressTracker = BlockProgress();
   BlockExecutor executor = BlockExecutor();
+  AccountOverview overview = AccountOverview();
 
   @override
   void initState() {
@@ -46,6 +47,8 @@ class _HomePageState extends State<HomePage> {
     while(blockActive){
       await Future.delayed(const Duration(seconds: 15));
       progressTracker.updateValues();
+      overview.initialize();
+
       blockActive = executor.getBlockActive();
     }
   }
