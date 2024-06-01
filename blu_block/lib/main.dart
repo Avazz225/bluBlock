@@ -2,6 +2,7 @@ import 'package:BluBlock/classes/account_overview.dart';
 import 'package:BluBlock/classes/block_executor.dart';
 import 'package:BluBlock/ui/pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -43,6 +44,8 @@ class MainAppState extends State<MainApp> {
     await progress.initialize();
     await accounts.initialize();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

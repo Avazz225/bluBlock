@@ -4,6 +4,7 @@ import 'package:BluBlock/ui/components/button.dart';
 import 'package:BluBlock/ui/pages/data_security.dart';
 import 'package:BluBlock/ui/pages/infos.dart';
 import 'package:BluBlock/ui/pages/settings_page.dart';
+import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,20 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    _initAutoStart();
+  }
+
+  Future<void> _initAutoStart() async {
+    try {
+      bool? test = await (isAutoStartAvailable);
+      print(test);
+      if (test == true){
+        await getAutoStartPermission();
+      }
+    } on PlatformException catch (e) {
+      debugPrint(e as String?);
+    }
+    if (!mounted) return;
   }
 
   @override
