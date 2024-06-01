@@ -149,7 +149,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Wartezeit in Minuten (min 5)"),
+                          const Text("Wartezeit in Minuten (min 15)"),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [

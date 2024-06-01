@@ -86,8 +86,8 @@ class Settings extends ChangeNotifier{
         await _db.updateDB("configuration", {"x_logged_in": value ? 1:0}, '1 = ?', [1]);
         break;
       case 'waitSecondsMin':
-        if (value < 300){
-          value = 300;
+        if (value < 900){
+          value = 900;
         }
         waitSecondsMin = value;
         await _db.updateDB("configuration", {"wait_seconds_min": value}, '1 = ?', [1]);
@@ -97,8 +97,8 @@ class Settings extends ChangeNotifier{
         }
         break;
       case 'waitSecondsMax':
-        if (value < 300){
-          value = 300;
+        if (value < 900){
+          value = 900;
         }
         if (value < waitSecondsMin){
           value = waitSecondsMin;
