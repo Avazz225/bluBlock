@@ -2,7 +2,6 @@ import 'package:BluBlock/classes/automated_web_view.dart';
 import 'package:BluBlock/classes/database.dart';
 import 'package:BluBlock/classes/url.dart';
 import 'package:BluBlock/js_logic/insta_logic.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'block_progress.dart';
 
@@ -22,9 +21,6 @@ class Account{
 
   Future<bool> block() async {
     bool blockResult = await AutomatedWebView(url: '${await(_getBaseUrl())}$accountId', jsActions: await _getBlockLogic()).performAutomatedActions();
-    print("------------------------------------------");
-    print("Automated WebView returned: $blockResult");
-    print("------------------------------------------");
     if (blockResult){
       _updateBlockState();
       progressTracker.updateBlockedCount(1);

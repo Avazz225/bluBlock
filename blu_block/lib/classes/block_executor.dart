@@ -33,9 +33,6 @@ class BlockExecutor extends ChangeNotifier{
     _blockActive = !_blockActive;
     if (_blockActive){
       _waitTimeSeconds = _defineWorkingWindow();
-      if (_waitTimeSeconds == 0){
-        _getWaitTime();
-      }
       String taskName = "blockProcess_${_genrateRandomString(10)}";
       Workmanager().registerOneOffTask(taskName, "bluBlock_blockScheduling", initialDelay: Duration(seconds: _waitTimeSeconds));
     } else {

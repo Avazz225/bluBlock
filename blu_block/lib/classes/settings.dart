@@ -63,21 +63,25 @@ class Settings extends ChangeNotifier{
     switch (variableName) {
       case 'facebookLoggedIn':
       case 'facebook_logged_in':
+      case 'facebook':
         facebookLoggedIn = value;
         await _db.updateDB("configuration", {"facebook_logged_in": value ? 1:0}, '1 = ?', [1]);
         break;
       case 'instaLoggedIn':
       case 'insta_logged_in':
+      case 'instagram':
         instaLoggedIn = value;
         await _db.updateDB("configuration", {"insta_logged_in": value ? 1:0}, '1 = ?', [1]);
         break;
       case 'tiktokLoggedIn':
       case 'tiktok_logged_in':
+      case 'tiktok':
         tiktokLoggedIn = value;
         await _db.updateDB("configuration", {"tiktok_logged_in": value ? 1:0}, '1 = ?', [1]);
         break;
       case 'xLoggedIn':
       case 'x_logged_in':
+      case 'x':
         xLoggedIn = value;
         await _db.updateDB("configuration", {"x_logged_in": value ? 1:0}, '1 = ?', [1]);
         break;

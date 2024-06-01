@@ -5,6 +5,7 @@ import 'package:BluBlock/ui/pages/infos.dart';
 import 'package:BluBlock/ui/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 
 import '../../classes/block_progress.dart';
@@ -20,6 +21,9 @@ class HomePage extends StatefulWidget  {
 }
 
 class _HomePageState extends State<HomePage> {
+  BlockProgress progressTracker = BlockProgress();
+  BlockExecutor executor = BlockExecutor();
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +39,15 @@ class _HomePageState extends State<HomePage> {
       DeviceOrientation.portraitDown,
     ]);
     super.dispose();
+  }
+
+  _refreshProgressPeriodically() async {
+    bool blockActive = true;
+    while(blockActive){
+      await Future.delayed(const Duration(seconds: 15));
+      progressTracker.updateValues();
+      blockActive = executor.getBlockActive();
+    }
   }
 
   @override
@@ -110,12 +123,15 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
-                const CircularProgressIndicatorWrapper(),
+                CircularProgressIndicatorWrapper(blockExecutor.getBlockActive()),
                 const SizedBox(height: 80,),
                 CustomButton(
                   text: (blockExecutor.getBlockActive()?"Blocken stoppen":"Blocken starten"),
                   onClick: () => {
-                    blockExecutor.toggleBlockActive()
+                    blockExecutor.toggleBlockActive(),
+                    if (blockExecutor.getBlockActive()){
+                      _refreshProgressPeriodically()
+                    }
                   }
                 )
               ],
@@ -128,7 +144,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class CircularProgressIndicatorWrapper extends StatelessWidget {
-  const CircularProgressIndicatorWrapper({super.key});
+  final bool blockActive;
+  const CircularProgressIndicatorWrapper(this.blockActive, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +160,7 @@ class CircularProgressIndicatorWrapper extends StatelessWidget {
           valueX: progressTracker.blockedCount,
           valueY: progressTracker.totalCount,
           valueZ: progressTracker.missedCount,
+          blockingActive: blockActive,
         ),
       ],
     );

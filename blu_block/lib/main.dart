@@ -70,12 +70,10 @@ class MainAppState extends State<MainApp> {
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    debugPrint("Starting blocking task...");
     BlockExecutor scheduler = BlockExecutor();
     await scheduler.initialize();
     scheduler.changeBlockActiveSilent();
     await scheduler.blockScheduler();
-    debugPrint("Finished blocking task...");
     return Future.value(true);
   });
 }

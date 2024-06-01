@@ -30,9 +30,7 @@ class AutomatedWebView {
       },
       onLoadStop: (controller, url) async {
         await controller.evaluateJavascript(source: jsActions);
-        print(url);
       },
-
     );
 
     await headlessWebView.run();

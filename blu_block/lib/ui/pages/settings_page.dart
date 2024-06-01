@@ -60,28 +60,28 @@ class _SettingsPageState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("Facebook"),
-                          (settings.facebookLoggedIn)?CustomButton(text: "Ausloggen", onClick: _dummyFunction) : CustomButton(text: "Einloggen", onClick: _dummyFunction),
+                          CustomButton(text: (settings.facebookLoggedIn)?"Ausloggen":"Einloggen", onClick: _dummyFunction),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("Instagram (+ Threads)"),
-                          (settings.instaLoggedIn)?CustomButton(text: "Ausloggen", onClick: _dummyFunction) : CustomButton(text: "Einloggen", onClick: _loginInstagram),
+                          CustomButton(text: (settings.instaLoggedIn)?"Ausloggen":"Einloggen", onClick: _loginInstagram),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("TikTok"),
-                          (settings.tiktokLoggedIn)?CustomButton(text: "Ausloggen", onClick: _dummyFunction) : CustomButton(text: "Einloggen", onClick: _dummyFunction),
+                          CustomButton(text: (settings.tiktokLoggedIn)?"Ausloggen":"Einloggen", onClick: _dummyFunction),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("X (ehem. Twitter)"),
-                          (settings.xLoggedIn)?CustomButton(text: "Ausloggen", onClick: _dummyFunction) :  CustomButton(text: "Einloggen", onClick: _dummyFunction),
+                          CustomButton(text: (settings.xLoggedIn)?"Ausloggen":"Einloggen", onClick: _dummyFunction),
                         ],
                       ),
                       Title(color: Colors.cyan, child: const Text("Einstellungen", style: TextStyle(fontSize: 20))),
