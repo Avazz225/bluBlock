@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:BluBlock/classes/account_overview.dart';
 import 'package:BluBlock/classes/database.dart';
 import 'package:BluBlock/classes/settings.dart';
 import 'package:BluBlock/helpers/random_wait_time.dart';
@@ -21,6 +22,7 @@ class BlockExecutor extends ChangeNotifier{
   bool _blockActive = false;
   final Settings _settings = Settings();
   final DatabaseHelper _db = DatabaseHelper();
+  final AccountOverview _accountOverview = AccountOverview();
 
   factory BlockExecutor() {
     return _instance;
@@ -60,6 +62,7 @@ class BlockExecutor extends ChangeNotifier{
       if (_accounts.isNotEmpty){
         await _executeBlocks();
         _getWaitTime();
+        _accountOverview.initialize();
         await Future.delayed(Duration(seconds: _waitTimeSeconds));
       } else {
         // if account list is empty: stop execution
