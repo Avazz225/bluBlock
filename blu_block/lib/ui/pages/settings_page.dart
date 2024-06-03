@@ -7,7 +7,6 @@ import 'package:BluBlock/ui/components/background.dart';
 import 'package:BluBlock/ui/components/button.dart';
 import 'package:BluBlock/ui/components/dropdown.dart';
 import 'package:BluBlock/ui/pages/login_web_view.dart';
-import 'package:BluBlock/ui/components/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

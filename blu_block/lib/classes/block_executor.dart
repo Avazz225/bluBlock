@@ -104,7 +104,7 @@ class BlockExecutor extends ChangeNotifier{
       if (loginStates[i]){
         List accounts = await _db.readDB('account', ['account_id', 'account_name', 'blocked', 'ignored', 'category_id', 'platform_id'], 'category_id  <= ? AND blocked=0 AND block_attempt=0 AND platform_id = ? AND ignored=0', [maxBlockLevel, i+1], 'category_id ASC, RANDOM()', _batchSize);
         for (final account in accounts){
-          _accounts.add(Account(account['account_id'], account['account_name'], account['platform_id'], account['category_id'], account['blocked'] == 1, account['ignored'] == 1));
+          _accounts.add(Account(account['account_id'], account['account_name'], account['platform_id'], account['category_id'], account['blocked'] == 1, account['ignored'] == 1, false));
         }
       }
     }

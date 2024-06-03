@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:provider/provider.dart';
 
 import '../../classes/automated_web_view.dart';
 import '../../classes/settings.dart';

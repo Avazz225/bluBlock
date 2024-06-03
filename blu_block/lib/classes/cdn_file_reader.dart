@@ -51,9 +51,14 @@ class CDNFileReader {
       'account_id': row[1].trim(),
       'account_name': row[2].trim(),
       'category_id': int.parse(row[3]),
-      'platform_id': _platformId
+      'platform_id': _platformId,
+      'block_attempt': 0,
     };
-    return await _db.insertDB("account", accountMapping);
+    int res = await _db.updateDB("account", accountMapping, "id = ?", accountMapping['id']);
+    if (res == 0){
+      res = await _db.insertDB("account", accountMapping);
+    }
+    return res;
   }
 
   int _createSixDigitNumber(int first, String secondStr) {

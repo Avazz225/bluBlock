@@ -1,4 +1,3 @@
-import 'package:BluBlock/classes/block_progress.dart';
 import 'package:BluBlock/classes/database.dart';
 import 'package:flutter/cupertino.dart';
 

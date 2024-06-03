@@ -13,7 +13,8 @@ class ListPage extends StatefulWidget  {
 class _ListPageState extends State<ListPage> {
   TextEditingController _searchController = TextEditingController();
   List _filteredAccounts = [];
-  final accounts = AccountOverview().getAccountList();
+  late var accounts = AccountOverview().getAccountList();
+  int _selectedFilter = 0;
 
   @override
   void initState() {
@@ -42,6 +43,16 @@ class _ListPageState extends State<ListPage> {
     super.dispose();
   }
 
+  void _onFilterChanged(int? value) {
+    setState(() {
+      _selectedFilter = value!;
+      _filterAccounts();
+    });
+
+    AccountOverview().setFilter(value!);
+    _filteredAccounts = AccountOverview().getAccountList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return (
@@ -52,20 +63,36 @@ class _ListPageState extends State<ListPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-                child:TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    labelText: 'Suchen',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                      },
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        labelText: 'Suchen',
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                          },
+                        )
+                      ),
                     ),
-                  ),
+                    DropdownButton<int>(
+                      value: _selectedFilter,
+                      items: const [
+                        DropdownMenuItem(value: 0, child: Text("Alle")),
+                        DropdownMenuItem(value: 1, child: Text("Nicht blockiert")),
+                        DropdownMenuItem(value: 2, child: Text("Blockiert")),
+                        DropdownMenuItem(value: 3, child: Text("Ignoriert")),
+                        DropdownMenuItem(value: 4, child: Text("Gescheitert")),
+                      ],
+                      onChanged: _onFilterChanged,
+                      isExpanded: true,
+                    ),
+                  ]
                 ),
               ),
               for (Map account in _filteredAccounts) AccountDisplay(account: account, refresh: _filterAccounts)
@@ -85,11 +112,22 @@ class AccountDisplay extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Color border = Colors.greenAccent;
+    if (account['account'].blocked){
+      border = Colors.greenAccent;
+    } else if (account['account'].ignored) {
+      border = Colors.yellowAccent;
+    } else if (account['account'].attempt){
+      border = Colors.redAccent;
+    } else {
+      border = Colors.grey;
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
       decoration: BoxDecoration(
-        border: Border.all(color: (account['account'].blocked)? Colors.greenAccent: (account['account'].ignored)? Colors.yellowAccent : Colors.redAccent),
+        border: Border.all(color: border),
         borderRadius: const BorderRadius.all(Radius.circular(15))
       ),
       child: Column(
@@ -106,7 +144,7 @@ class AccountDisplay extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               (account['account'].blocked)?const Text("") : CustomButton(text: (account['account'].ignored)?"Nicht mehr ignorieren": "Ignorieren", onClick: () {account['account'].toggleIgnored(); AccountOverview().initialize(); refresh();}),
-              Text("Blockiert: ${(account['account'].blocked)? "Ja": "Nein"}${(account['account'].ignored)?" (Ignoriert)":""}"),
+              Text("Blockiert: ${(account['account'].blocked)? "Ja": "Nein"}${(account['account'].ignored)?" (Ignoriert)":""}${(account['account'].attempt && !account['account'].ignored)?" (Gescheitert)":""}"),
             ]
           )
         ]

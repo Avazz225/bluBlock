@@ -10,6 +10,7 @@ class AccountOverview extends ChangeNotifier{
   final Map _platforms = {}; 
   final Map _categories = {};
   final DatabaseHelper _db = DatabaseHelper();
+  int filter = 0;
 
   factory AccountOverview() {
     return _instance;
@@ -23,9 +24,9 @@ class AccountOverview extends ChangeNotifier{
   _initValues() async {
     _accounts = [];
     int maxBlockLevel = (await _db.readDB('configuration', ['block_level'], '1 = ?', [1], 'block_level ASC', 1))[0]['block_level'];
-    List accountNames = await _db.readDB('account', ['account_id', 'account_name', 'blocked', 'ignored', 'category_id', 'platform_id'], 'category_id  <= ?', [maxBlockLevel], 'category_id ASC, account_name ASC', 1000000);
+    List accountNames = await _db.readDB('account', ['account_id', 'account_name', 'blocked', 'ignored', 'category_id', 'platform_id', 'block_attempt'], 'category_id  <= ?', [maxBlockLevel], 'category_id ASC, account_name ASC', 1000000);
     for (final account in accountNames){
-      _accounts.add(Account(account['account_id'], account['account_name'], account['platform_id'], account['category_id'], account['blocked'] == 1, account['ignored'] == 1));
+      _accounts.add(Account(account['account_id'], account['account_name'], account['platform_id'], account['category_id'], account['blocked'] == 1, account['ignored'] == 1, account['block_attempt'] == 1));
     }
 
     List rawPlatforms = await _db.readDB('platform', ['platform_id', 'platform_name'], '1 = ?', [1], 'platform_id ASC', 100);
@@ -39,10 +40,37 @@ class AccountOverview extends ChangeNotifier{
     }
   }
 
+  setFilter(int value){
+    filter = value;
+  }
+
   getAccountList(){
     List<Map> result = [];
     for (final acc in _accounts){
-      result.add({"account": acc, "platform":_platforms[acc.platformId], "category":_categories[acc.categoryId]});
+      if (filter == 0){
+        //all accounts
+        result.add({"account": acc, "platform":_platforms[acc.platformId], "category":_categories[acc.categoryId]});
+      } else if (filter == 1){
+        //only not processed accounts
+        if (!acc.blocked && !acc.attempt && !acc.ignored){
+          result.add({"account": acc, "platform":_platforms[acc.platformId], "category":_categories[acc.categoryId]});
+        }
+      } else if (filter == 2){
+        //only successful accounts
+        if (acc.blocked && !acc.attempt && !acc.ignored){
+          result.add({"account": acc, "platform":_platforms[acc.platformId], "category":_categories[acc.categoryId]});
+        }
+      } else if (filter == 3){
+        //only ignored accounts
+        if (acc.ignored){
+          result.add({"account": acc, "platform":_platforms[acc.platformId], "category":_categories[acc.categoryId]});
+        }
+      } else if (filter == 4){
+        //only failed accounts
+        if (!acc.blocked && acc.attempt && !acc.ignored){
+          result.add({"account": acc, "platform":_platforms[acc.platformId], "category":_categories[acc.categoryId]});
+        }
+      }
     }
     return result;
   }

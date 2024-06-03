@@ -12,11 +12,12 @@ class Account{
   final int categoryId;
   bool ignored;
   bool blocked;
+  bool attempt;
   final DatabaseHelper _db = DatabaseHelper();
   final Url _url = Url();
   final BlockProgress progressTracker = BlockProgress();
   
-  Account(this.accountId, this.accountName, this.platformId, this.categoryId, this.blocked, this.ignored);
+  Account(this.accountId, this.accountName, this.platformId, this.categoryId, this.blocked, this.ignored, this.attempt);
 
 
   Future<bool> block() async {
@@ -25,9 +26,9 @@ class Account{
       _updateBlockState();
       progressTracker.updateBlockedCount(1);
     } else {
+      await _db.updateDB('account', {'block_attempt': 1}, 'account_id = ? AND account_name = ? AND platform_id = ? AND category_id = ?', [accountId, accountName, platformId, categoryId]);
       progressTracker.updateMissedCount(1);
     }
-    await _db.updateDB('account', {'block_attempt': 1}, 'account_id = ? AND account_name = ? AND platform_id = ? AND category_id = ?', [accountId, accountName, platformId, categoryId]);
     return blockResult;
   }
 
