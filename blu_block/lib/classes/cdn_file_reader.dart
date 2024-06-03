@@ -54,9 +54,11 @@ class CDNFileReader {
       'platform_id': _platformId,
       'block_attempt': 0,
     };
-    int res = await _db.updateDB("account", accountMapping, "id = ?", accountMapping['id']);
+    int res = await _db.updateDB("account", accountMapping, "id = ?", [accountMapping['id']]);
     if (res == 0){
       res = await _db.insertDB("account", accountMapping);
+    } else {
+      res = 0;
     }
     return res;
   }
