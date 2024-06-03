@@ -21,7 +21,7 @@ class DataSecurity extends StatelessWidget{
               Text('\n'),
               Text('Wo kommen die Blocklisten her?', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(''),
-              Text('''Die Blocklisten kommen von unserem Content Delivery Network. Dafür wird keine Authentifizierung benötigt. Es kann also jede Person kann von überall auf der Welt auf die Listen zugreifen. Hierbei kann BluBlock nicht zuordnen, wer auf die Daten zugegriffen hat.'''),
+              Text('''Die Blocklisten kommen von unserem Content Delivery Network. Dafür wird keine Authentifizierung benötigt. Es kann also jede Person von überall auf der Welt auf die Listen zugreifen. Hierbei wird BluBlock nicht zuordnen, wer auf die Daten zugegriffen hat.'''),
               Text('\n'),
               Text('Wie lang werden die anonymen Logs des Content Delivery Networks aufgehoben?', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(''),

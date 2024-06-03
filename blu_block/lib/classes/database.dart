@@ -91,7 +91,7 @@ class DatabaseHelper {
     );
 
     await db.execute('''
-      INSERT OR IGNORE INTO "configuration" ("cloudfront_url") VALUES ("https://d1wkl9s3pa535c.cloudfront.net");
+      INSERT OR IGNORE INTO "configuration" ("cloudfront_url") VALUES ("${const String.fromEnvironment("CDN_URL")}");
       '''
     );
   }
