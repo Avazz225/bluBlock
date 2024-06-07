@@ -133,6 +133,7 @@ class AccountDisplay extends StatelessWidget{
       child: Column(
         children: [
           Text("${account['account'].accountName}", style: const TextStyle(fontSize: 18),),
+          Text(((account['account'].accountId.startsWith("@"))?"":"@") + account['account'].accountId, style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
