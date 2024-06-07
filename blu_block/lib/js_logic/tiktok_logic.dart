@@ -60,22 +60,36 @@ window.onload = executeBlock();
 
 String tiktokLoginLogic = '''
 function checkLogin() {
-    var result = "BluBlockScriptResult - ";
-    try {
-        const loginBtn = document.getElementById('header-login-button');
-
-        if (loginBtn) {
-            result += 'false';
-        } else {
+  var result = "BluBlockScriptResult - ";
+  try {
+    setTimeout(() => {
+      const loginBtn = document.getElementById('header-login-button');
+      if (loginBtn) {
+          result += 'false';
+          console.log(result);
+      } else {
+        setTimeout(() => {
+          const registerLink = document.getElementsByClassName('css-12ys7l-ALink epl6mg0')[0];
+          if (registerLink){
+            if (registerLink.href === "https://www.tiktok.com/signup"){
+              result += 'false'
+              console.log(result);
+            } else {
+                result += 'true';
+                console.log(result);
+            }
+          } else {
             result += 'true';
-        }
-    } catch {
-        result += 'false';
-    }
-    console.log(result);
+            console.log(result);
+          }
+        },${randomNumberGenerator(1000, 1250)}); 
+      }
+    },${randomNumberGenerator(1000, 1250)});
+  } catch {
+      result += 'false';
+      console.log(result);
+  }
 }
 
-setTimeout(() => {
-    checkLogin();
-},${randomNumberGenerator(1000, 1250)});
+window.onload = checkLogin();
 ''';

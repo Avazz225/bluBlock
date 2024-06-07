@@ -29,6 +29,7 @@ class LoginWebView extends StatelessWidget {
         initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse(initialUrl))),
         initialSettings: InAppWebViewSettings(
           javaScriptEnabled: true,
+          preferredContentMode: UserPreferredContentMode.DESKTOP,
         ),
         onCloseWindow: (controller) async {
           await _checkLoginStatus();
