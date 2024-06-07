@@ -32,7 +32,7 @@ class CDNFileReader {
       final lines = const LineSplitter().convert(response.body);
       for (final line in lines) {
         try{
-          int result = await _importRow(line.split(","));
+          int result = await _importRow(line.split(";"));
           if (result!=0){
             importedRows++;
           }

@@ -22,7 +22,7 @@ class ImportList{
       'x'];
     for (int i = 0; i<loginStates.length; i++){
       if (loginStates[i] == 1){
-        _reader.setPlatform(platforms[i]+".lst", i+1);
+        _reader.setPlatform(platforms[i]+".csv", i+1);
         _importedRows = (await _reader.readFileAndPerformAction());
       }
     }
