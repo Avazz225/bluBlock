@@ -215,7 +215,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
   _dummyFunction(){
     String title = "Noch nicht vorhanden";
-    String msg = "Diese Funktion steht bisher nur für Instagram bereit.";
+    String msg = "Diese Funktion steht bisher nur für Instagram und TikTok bereit.";
     showMessage(context, msg, title);
   }
 
