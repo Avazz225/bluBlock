@@ -54,7 +54,6 @@ class BlockExecutor extends ChangeNotifier{
 
   blockScheduler() async {
     while(_blockActive){
-      print("New BATCH");
       //block execution
       _getBatchSize();
       await _getNewList();
