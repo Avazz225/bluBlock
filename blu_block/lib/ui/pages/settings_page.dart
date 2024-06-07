@@ -3,6 +3,7 @@ import 'package:BluBlock/classes/import_list.dart';
 import 'package:BluBlock/classes/settings.dart';
 import 'package:BluBlock/classes/url.dart';
 import 'package:BluBlock/js_logic/insta_logic.dart';
+import 'package:BluBlock/js_logic/tiktok_logic.dart';
 import 'package:BluBlock/ui/components/background.dart';
 import 'package:BluBlock/ui/components/button.dart';
 import 'package:BluBlock/ui/components/dropdown.dart';
@@ -73,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("TikTok"),
-                          CustomButton(text: (settings.tiktokLoggedIn)?"Ausloggen":"Einloggen", onClick: _dummyFunction),
+                          CustomButton(text: (settings.tiktokLoggedIn)?"Ausloggen":"Einloggen", onClick: _loginTikTok),
                         ],
                       ),
                       Row(
@@ -234,6 +235,15 @@ class _SettingsPageState extends State<SettingsPage> {
       // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: instaLoginLogic, platform: "instagram"))
+    );
+  }
+
+  _loginTikTok() async {
+    String initialUrl = (await Url().getPlatformUrl(3));
+    Navigator.push(
+      // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: tiktokLoginLogic, platform: "tiktok"))
     );
   }
 }

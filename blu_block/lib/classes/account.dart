@@ -2,6 +2,7 @@ import 'package:BluBlock/classes/automated_web_view.dart';
 import 'package:BluBlock/classes/database.dart';
 import 'package:BluBlock/classes/url.dart';
 import 'package:BluBlock/js_logic/insta_logic.dart';
+import 'package:BluBlock/js_logic/tiktok_logic.dart';
 
 import 'block_progress.dart';
 
@@ -45,6 +46,8 @@ class Account{
     String platform = (await _db.readDB("platform", ["platform_name"], "platform_id = ?", [platformId], 'platform_id ASC', 1))[0]['platform_name'].toLowerCase();
     if (platform == "instagram"){
       return instaBlockLogic;
+    } else if (platform == "tiktok"){
+      return tiktokBlockLogic;
     }
     return "";
   }
