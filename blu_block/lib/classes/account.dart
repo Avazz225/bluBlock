@@ -3,6 +3,7 @@ import 'package:BluBlock/classes/database.dart';
 import 'package:BluBlock/classes/url.dart';
 import 'package:BluBlock/js_logic/insta_logic.dart';
 import 'package:BluBlock/js_logic/tiktok_logic.dart';
+import 'package:BluBlock/js_logic/x_logic.dart';
 
 import 'block_progress.dart';
 
@@ -48,8 +49,10 @@ class Account{
       return instaBlockLogic;
     } else if (platform == "tiktok"){
       return tiktokBlockLogic;
+    } else if (platform == "x"){
+      return xBlockLogic;
     }
-    return "";
+    return "console.log('BluBlockScriptResult - false')";
   }
 
   toggleIgnored(){

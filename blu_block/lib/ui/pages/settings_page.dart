@@ -4,6 +4,7 @@ import 'package:BluBlock/classes/settings.dart';
 import 'package:BluBlock/classes/url.dart';
 import 'package:BluBlock/js_logic/insta_logic.dart';
 import 'package:BluBlock/js_logic/tiktok_logic.dart';
+import 'package:BluBlock/js_logic/x_logic.dart';
 import 'package:BluBlock/ui/components/background.dart';
 import 'package:BluBlock/ui/components/button.dart';
 import 'package:BluBlock/ui/components/dropdown.dart';
@@ -81,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("X (ehem. Twitter)"),
-                          CustomButton(text: (settings.xLoggedIn)?"Ausloggen":"Einloggen", onClick: _dummyFunction),
+                          CustomButton(text: (settings.xLoggedIn)?"Ausloggen":"Einloggen", onClick: _loginX),
                         ],
                       ),
                       Title(color: Colors.cyan, child: const Text("Einstellungen", style: TextStyle(fontSize: 20))),
@@ -215,7 +216,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
   _dummyFunction(){
     String title = "Noch nicht vorhanden";
-    String msg = "Diese Funktion steht bisher nur für Instagram bereit.";
+    String msg = "Diese Funktion steht bisher nur für Instagram und X bereit.";
     showMessage(context, msg, title);
   }
 
@@ -256,6 +257,15 @@ class _SettingsPageState extends State<SettingsPage> {
       // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: tiktokLoginLogic, platform: "tiktok"))
+    );
+  }
+
+  _loginX() async {
+    String initialUrl = (await Url().getPlatformUrl(2));
+    Navigator.push(
+      // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: xLoginLogic, platform: "x"))
     );
   }
 }
