@@ -74,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("TikTok"),
-                          CustomButton(text: (settings.tiktokLoggedIn)?"Ausloggen":"Einloggen", onClick: _loginTikTok),
+                          CustomButton(text: (settings.tiktokLoggedIn)?"Ausloggen":"Einloggen", onClick: _dummyFunction),
                         ],
                       ),
                       Row(
@@ -215,7 +215,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
   _dummyFunction(){
     String title = "Noch nicht vorhanden";
-    String msg = "Diese Funktion steht bisher nur für Instagram und TikTok bereit.";
+    String msg = "Diese Funktion steht bisher nur für Instagram bereit.";
     showMessage(context, msg, title);
   }
 

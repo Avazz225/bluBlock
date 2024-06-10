@@ -16,7 +16,6 @@ class AutomatedWebView {
       initialSettings: InAppWebViewSettings(
         javaScriptEnabled: true,
         loadsImagesAutomatically: false,
-        preferredContentMode: UserPreferredContentMode.DESKTOP,
       ),
 
       onConsoleMessage: (controller, consoleMessage) {
