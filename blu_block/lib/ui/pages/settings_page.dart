@@ -220,13 +220,25 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   _startListRefresh() async {
-    ImportList importer = ImportList();
-    int result = await importer.executeImport();
-    int totalCount = await _db.getCount('account', ['COUNT(*)'], '1 = ?', [1], 'id ASC', 1);
-    String title = "Import abgeschlossen";
-    String msg = "Es wurden $result neue Einträge importiert.\nEs existieren jetzt $totalCount Einträge.";
-    // ignore: use_build_context_synchronously
-    showMessage(context, msg, title);
+    DateTime lastTime = DateTime.tryParse((await _db.readDB("configuration", ["last_file_refresh"], "1 = ?", [1], "last_file_refresh ASC", 1))[0]["last_file_refresh"])!;
+    DateTime now = DateTime.now();
+    if (now.isAfter(lastTime.add(const Duration(days: 1)))){
+      ImportList importer = ImportList();
+      int result = await importer.executeImport();
+      int totalCount = await _db.getCount('account', ['COUNT(*)'], '1 = ?', [1], 'id ASC', 1);
+      String title = "Import abgeschlossen";
+      String msg = "Es wurden $result neue Einträge importiert.\nEs existieren jetzt $totalCount Einträge.";
+      // ignore: use_build_context_synchronously
+      showMessage(context, msg, title);
+    } else {
+      Duration difference = now.difference(lastTime);
+      int hours = difference.inHours;
+      int minutes = difference.inMinutes.remainder(60);
+      String title = "Nicht verfügbar";
+      String msg = "Du kannst nur alle 24h einen Import durchführen.\nBitte warte noch ${hours.toString().padLeft(2, '0')} Stunde(n) und ${minutes.toString().padLeft(2, '0')} Minute(n).";
+      // ignore: use_build_context_synchronously
+      showMessage(context, msg, title);
+    }
   }
 
   _loginInstagram() async {
