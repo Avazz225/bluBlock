@@ -98,22 +98,6 @@ class _SettingsPageState extends State<SettingsPage> {
                           DropdownComponent(defaultValue: settings.blockLevel)
                         ]
                       ),
-                      /*Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Arbeitszeit"),
-                          SizedBox(
-                            width: 110,
-                            child:Column(
-                              children: [
-                                TimePickerComponent(initialSeconds: settings.workWindowStart, variableName: "workWindowStart"),
-                                const Text("bis"),
-                                TimePickerComponent(initialSeconds: settings.workWindowEnd, variableName: "workWindowEnd"),
-                              ]
-                            )
-                          ),
-                        ],
-                      ),*/
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -246,7 +230,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Navigator.push(
       // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: instaLoginLogic, platform: "instagram"))
+        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: instaLoginLogic, platform: "instagram", isLogin: !Settings().instaLoggedIn))
     );
   }
 
@@ -255,7 +239,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Navigator.push(
       // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: tiktokLoginLogic, platform: "tiktok"))
+        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: tiktokLoginLogic, platform: "tiktok", isLogin: !Settings().tiktokLoggedIn))
     );
   }
 }
