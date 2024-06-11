@@ -45,7 +45,7 @@ class Settings extends ChangeNotifier{
     facebookLoggedIn = rawSettings['facebook_logged_in'] == 1;
     instaLoggedIn = rawSettings['insta_logged_in'] == 1;
     tiktokLoggedIn = rawSettings['tiktok_logged_in'] == 1;
-    xLoggedIn = rawSettings['x_logged_in'] == '1';
+    xLoggedIn = rawSettings['x_logged_in'] == 1;
 
     blockLevel = rawSettings['block_level'];
     waitSecondsMin = rawSettings['wait_seconds_min'];

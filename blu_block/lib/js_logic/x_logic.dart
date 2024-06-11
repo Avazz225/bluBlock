@@ -5,8 +5,10 @@ function executeBlock(){
     var result = "BluBlockScriptResult - ";
     try{
     setTimeout(() => {
-        const alreadyBlocked = document.getElementsByClassName('css-175oi2r r-sdzlij r-1phboty r-rs99b7 r-lrvibr r-2yi16 r-1qi8awa r-3pj75a r-1loqt21 r-o7ynqc r-6416eg r-1ny4l3l')[0];
-        if (alreadyBlocked.dataset.testid.endsWith("unblock")){
+        console.log(result + document.documentElement.outerHTML);
+        const alreadyBlocked = document.getElementsByClassName('css-175oi2r r-sdzlij r-1phboty r-rs99b7 r-lrvibr r-2yi16 r-1qi8awa r-3pj75a r-1loqt21 r-o7ynqc r-6416eg r-1ny4l3l');
+        const text = alreadyBlocked[0].textContent.toLowerCase();
+        if (text === "blockiert" || text === "blocked"){
             result += 'true';
             console.log(result);
         } else {
@@ -43,7 +45,7 @@ function executeBlock(){
                 console.log(result);
             }
         }
-    },${randomNumberGenerator(250, 1000)});
+    },${randomNumberGenerator(1000, 1500)});
     } catch {
     result += 'false';
     console.log(result);

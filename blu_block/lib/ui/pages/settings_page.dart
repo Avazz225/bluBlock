@@ -232,9 +232,9 @@ class _SettingsPageState extends State<SettingsPage> {
       // ignore: use_build_context_synchronously
       showMessage(context, msg, title);
     } else {
-      Duration difference = now.difference(lastTime);
-      int hours = difference.inHours;
-      int minutes = difference.inMinutes.remainder(60);
+      Duration difference = now.difference(lastTime.add(const Duration(days: 1)));
+      int hours = difference.inHours * -1;
+      int minutes = difference.inMinutes.remainder(60) * -1;
       String title = "Nicht verfügbar";
       String msg = "Du kannst nur alle 24h einen Import durchführen.\nBitte warte noch ${hours.toString().padLeft(2, '0')} Stunde(n) und ${minutes.toString().padLeft(2, '0')} Minute(n).";
       // ignore: use_build_context_synchronously
@@ -261,7 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   _loginX() async {
-    String initialUrl = (await Url().getPlatformUrl(2));
+    String initialUrl = (await Url().getPlatformUrl(4));
     Navigator.push(
       // ignore: use_build_context_synchronously
         context,

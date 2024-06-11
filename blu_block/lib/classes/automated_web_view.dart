@@ -15,10 +15,10 @@ class AutomatedWebView {
       initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse(url))),
       initialSettings: InAppWebViewSettings(
         javaScriptEnabled: true,
-        loadsImagesAutomatically: false,
+        loadsImagesAutomatically: true,
       ),
 
-      onConsoleMessage: (controller, consoleMessage) {
+      onConsoleMessage: (controller, consoleMessage) async {
         if (consoleMessage.message.startsWith("BluBlockScriptResult - ")){
           String consoleResult = consoleMessage.message.substring(23);
           result = consoleResult.trim() == "true";
