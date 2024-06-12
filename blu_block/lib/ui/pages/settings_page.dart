@@ -204,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   _startListRefresh() async {
-    DateTime lastTime = DateTime.tryParse((await _db.readDB("configuration", ["last_file_refresh"], "1 = ?", [1], "last_file_refresh ASC", 1))[0]["last_file_refresh"])!;
+    DateTime lastTime = Settings().lastFileRefresh;
     DateTime now = DateTime.now();
     if (now.isAfter(lastTime.add(const Duration(days: 1)))){
       ImportList importer = ImportList();

@@ -17,6 +17,8 @@ migrate_working_dir/
 .idea/
 
 logic_tests
+_build_scripts
+lib/helpers/cdn.dart
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line

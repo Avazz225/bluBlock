@@ -1,3 +1,4 @@
+import 'package:BluBlock/helpers/cdn.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -91,7 +92,12 @@ class DatabaseHelper {
     );
 
     await db.execute('''
-      INSERT OR IGNORE INTO "configuration" ("cloudfront_url") VALUES ("${const String.fromEnvironment("CDN_URL")}");
+      INSERT OR IGNORE INTO "configuration" ("cloudfront_url") VALUES ("$CDN_URL");
+      '''
+    );
+
+    await db.execute('''
+      UPDATE "configuration" SET cloudfront_url ="$CDN_URL" WHERE 1=1;
       '''
     );
   }
