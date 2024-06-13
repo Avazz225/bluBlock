@@ -13,10 +13,6 @@ class BlockExecutor extends ChangeNotifier{
   List<Account> _accounts = [];
   int _waitTimeSeconds = 0;
   int _batchSize = 0;
-  /*
-  int _workWindowStartSecs = 0;
-  int _workWindowEndSecs = 0;
-  */
   int _totalActions = 0;
   int _succeededActions = 0;
   bool _blockActive = false;
@@ -53,23 +49,34 @@ class BlockExecutor extends ChangeNotifier{
   }
 
   blockScheduler() async {
+    List<bool> loginStates = [_settings.facebookLoggedIn, _settings.instaLoggedIn, _settings.tiktokLoggedIn, _settings.xLoggedIn];
     while(_blockActive){
       //block execution
       _getBatchSize();
-      await _getNewList();
-      //only execute blocks and get waitTime if account list is not empty
-      if (_accounts.isNotEmpty){
-        await _executeBlocks();
-        _getWaitTime();
-        _accountOverview.initialize();
-        await Future.delayed(Duration(seconds: _waitTimeSeconds));
+      //check if daily limit is about to be reached
+      if (_batchSize > (_settings.maxBatchSize - _settings.dailyBlocks)){
+        _batchSize = _settings.maxBatchSize  - _settings.dailyBlocks;
+      }
+
+      if (_batchSize > 0){
+        await _getNewList();
+        //only execute blocks and get waitTime if account list is not empty
+        if (_accounts.isNotEmpty){
+          await _executeBlocks();
+          _getWaitTime();
+          _accountOverview.initialize();
+          _settings.updateValue("daily_blocks", _settings.dailyBlocks + _batchSize);
+          await Future.delayed(Duration(seconds: _waitTimeSeconds));
+        } else {
+          // if account list is empty: stop execution (all accounts blocked)
+          toggleBlockActive();
+        }
       } else {
-        // if account list is empty: stop execution
+        // daily blocklimit reached
         toggleBlockActive();
       }
     }
   }
-
   _executeBlocks() async {
     for (final account in _accounts){
       bool res = false;
@@ -87,7 +94,7 @@ class BlockExecutor extends ChangeNotifier{
   }
 
   _getBatchSize() {
-    _batchSize = Random().nextInt(_settings.maxBatchSize)+1;
+    _batchSize = Random().nextInt(5)+1;
   }
 
   _getWaitTime() {
@@ -108,38 +115,6 @@ class BlockExecutor extends ChangeNotifier{
       }
     }
   }
-
-/*_getWorkingWindow() {
-    _workWindowStartSecs = _settings.workWindowStart;
-    _workWindowEndSecs = _settings.workWindowEnd;
-  }
-
-  int _defineWorkingWindow() {
-    _getWorkingWindow();
-    DateTime now = DateTime.now();
-    int secondsSinceMidnight = now.hour * 3600 + now.minute * 60 + now.second;
-
-    //is over night
-    if (_workWindowEndSecs < _workWindowStartSecs){
-      if (secondsSinceMidnight > _workWindowStartSecs || secondsSinceMidnight < _workWindowEndSecs){
-        return 0;
-      } else {
-        return _workWindowStartSecs - secondsSinceMidnight;
-      }
-    // is not over night
-    } else {
-      if (secondsSinceMidnight >= _workWindowStartSecs && secondsSinceMidnight < _workWindowEndSecs){
-        return 0;
-      } else 
-        if (secondsSinceMidnight < _workWindowStartSecs){
-          // same day
-          return _workWindowStartSecs - secondsSinceMidnight;
-        } else {
-          // next dayv
-          return (86400 - _workWindowStartSecs) + _workWindowStartSecs;
-        }
-      }
-  }*/
 
   BlockExecutor._internal();
 }
