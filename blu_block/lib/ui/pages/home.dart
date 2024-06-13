@@ -1,6 +1,5 @@
 import 'package:BluBlock/classes/block_executor.dart';
 import 'package:BluBlock/ui/components/button.dart';
-import 'package:BluBlock/ui/pages/data_security.dart';
 import 'package:BluBlock/ui/pages/infos.dart';
 import 'package:BluBlock/ui/pages/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -119,12 +118,19 @@ class _HomePageState extends State<HomePage> {
                 :
                 Column(
                   children: [
-                    CustomButton(
-                        text: (blockExecutor.getBlockActive()?"Blocken stoppen":"Blocken starten"),
-                        onClick: () => {
-                          blockExecutor.toggleBlockActive(),
-                        }
-                    ),
+                    if (settings.dailyBlocks < settings.maxBatchSize)
+                      CustomButton(
+                          text: (blockExecutor.getBlockActive()?"Blocken stoppen":"Blocken starten"),
+                          onClick: () => {
+                            blockExecutor.toggleBlockActive(),
+                          }
+                      ),
+                    if (settings.dailyBlocks >= settings.maxBatchSize)
+                      const Text(
+                        "Das tägliche Blocklimit wurde erreicht.\nKomme morgen wieder um fortzufahren.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     if (settings.lastFileRefresh.add(const Duration(days: 7)).isBefore(DateTime.now()))
                       Column(
                         children: [

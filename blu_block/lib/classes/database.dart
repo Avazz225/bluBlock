@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:BluBlock/helpers/cdn.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -22,9 +24,31 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'blublock_database3.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 4,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
+  }
+
+  FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 4) {
+      await db.execute('''
+      ALTER TABLE "configuration"
+        ADD "daily_blocks" INTEGER NOT NULL DEFAULT 0;
+      '''
+      );
+
+      await db.execute('''
+      ALTER TABLE "configuration"
+        ADD "daily_blocks_for_date" TEXT NOT NULL DEFAULT "never";
+      '''
+      );
+
+      await db.execute('''
+      UPDATE "configuration" SET cloudfront_url ="$CDN_URL" WHERE 1=1;
+      '''
+      );
+    }
   }
 
   Future _onCreate(Database db, int version) async {
@@ -65,7 +89,7 @@ class DatabaseHelper {
         "cloudfront_url"	TEXT UNIQUE,
         "wait_seconds_min"	INTEGER NOT NULL DEFAULT 20,
         "wait_seconds_max"	INTEGER NOT NULL DEFAULT 30,
-        "max_batch_size"	INTEGER NOT NULL DEFAULT 5,
+        "max_batch_size"	INTEGER NOT NULL DEFAULT 40,
         "work_window_start"	INTEGER NOT NULL DEFAULT 79200,
         "work_window_end"	INTEGER NOT NULL DEFAULT 18000,
         "facebook_logged_in" INTEGER NOT NULL DEFAULT 0,
@@ -96,10 +120,6 @@ class DatabaseHelper {
       '''
     );
 
-    await db.execute('''
-      UPDATE "configuration" SET cloudfront_url ="$CDN_URL" WHERE 1=1;
-      '''
-    );
   }
 
   // Create

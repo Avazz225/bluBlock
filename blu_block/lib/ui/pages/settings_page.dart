@@ -101,7 +101,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Paketgröße"),
+                          const Text("Tägliche Blocks je Plattform"),
                           SizedBox(
                             width: 110,
                             child:Column(
