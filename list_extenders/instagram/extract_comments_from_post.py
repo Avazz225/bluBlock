@@ -7,8 +7,6 @@ import dotenv
 dotenv.load_dotenv()
 
 posts_to_extract_comments = [
-    'C8FO299JALj','C78n27zPJ8o',
-    'C8EWbKoMP42','C77EIqiI3uT',
     'C8EBrOjqnck','C769YWvI_hx',
     'C8DHzoOsf_T','C762vK8NrQO',
     'C8C52UoNGKw','C76rWxms8XG',
@@ -41,9 +39,9 @@ search_for = "💙"
 
 def extract_comments():
     L = instaloader.Instaloader()
-    user = os.environ.get("INSTA_USERNAME")
-    password = os.environ.get("INSTA_PASSWD")
-    L.login(user, password)  
+    #user = os.environ.get("INSTA_USERNAME")
+    #password = os.environ.get("INSTA_PASSWD")
+    #L.login(user, password)  
     
     print("Starting extraction")
     already_listed = helpers.get_already_listed()
@@ -57,6 +55,7 @@ def extract_comments():
         for comment in qualified_comments:
             already_listed.append(comment['user_id'])
         time.sleep(20)
+        input("Extracted %s comments from %s\nPress Enter to continue..." % (len(qualified_comments), post))
     
     print("Finished extraction")
 
