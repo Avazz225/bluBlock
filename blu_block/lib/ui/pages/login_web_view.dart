@@ -40,9 +40,14 @@ class LoginWebView extends StatelessWidget {
   }
 
   _checkLoginStatus(context) async {
-    showMessage(context, "Dein Loginstatus wird geprüft.\nBitte warte kurz.", "Prüfen", false);
-    bool checkResult = await AutomatedWebView(url: initialUrl,jsActions: jsLogic).performAutomatedActions();
+    bool checkResult = false;
+    if(isLogin){
+      showMessage(context, "Dein Loginstatus wird geprüft.\nBitte warte kurz.", "Prüfen", false);
+      checkResult = await AutomatedWebView(url: initialUrl,jsActions: jsLogic).performAutomatedActions();
+    }
     settings.updateValue(platform, checkResult);
-    Navigator.of(context).pop();
+    if(isLogin){
+      Navigator.of(context).pop();
+    }
   }
 }
