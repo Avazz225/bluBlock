@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../../classes/automated_web_view.dart';
+import '../../classes/block_progress.dart';
 import '../../classes/settings.dart';
 
 class LoginWebView extends StatelessWidget {
@@ -11,6 +12,7 @@ class LoginWebView extends StatelessWidget {
   final String platform;
   final bool isLogin;
   final Settings settings = Settings();
+  final BlockProgress progressTracker = BlockProgress();
 
   LoginWebView({super.key, required this.initialUrl, required this.jsLogic, required this.platform, required this.isLogin});
 
@@ -46,6 +48,7 @@ class LoginWebView extends StatelessWidget {
       checkResult = await AutomatedWebView(url: initialUrl,jsActions: jsLogic).performAutomatedActions();
     }
     settings.updateValue(platform, checkResult);
+    progressTracker.updateValues();
     if(isLogin){
       Navigator.of(context).pop();
     }
