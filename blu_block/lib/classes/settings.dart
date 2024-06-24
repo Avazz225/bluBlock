@@ -15,6 +15,7 @@ class Settings extends ChangeNotifier{
   int blockLevel = 1;
   int workWindowStart = 0;
   int workWindowEnd = 0;
+  int dailyBlocks = 0;
   final DatabaseHelper _db = DatabaseHelper();
 
   factory Settings() {
@@ -27,6 +28,13 @@ class Settings extends ChangeNotifier{
   }
 
   Future<void> _initValues() async {
+
+    bool isSameDay(DateTime date1, DateTime date2) {
+      return date1.year == date2.year &&
+          date1.month == date2.month &&
+          date1.day == date2.day;
+    }
+
     List<String> targetCols = [
       'block_level', 
       'wait_seconds_min', 
@@ -38,7 +46,9 @@ class Settings extends ChangeNotifier{
       'insta_logged_in',
       'tiktok_logged_in',
       'x_logged_in',
-      'last_file_refresh'
+      'last_file_refresh',
+      'daily_blocks',
+      'daily_blocks_for_date'
     ];
     Map rawSettings = (await _db.readDB("configuration", targetCols, '1 = ?', [1], 'block_level ASC', 1))[0];
     
@@ -53,8 +63,18 @@ class Settings extends ChangeNotifier{
     maxBatchSize = rawSettings['max_batch_size'];
     workWindowStart = rawSettings['work_window_start'];
     workWindowEnd = rawSettings['work_window_end'];
+
     if (rawSettings['last_file_refresh'] != 'never'){
       lastFileRefresh = DateTime.parse(rawSettings['last_file_refresh']);
+    }
+    
+    if (rawSettings['daily_blocks_for_date'] == "never"){
+      updateValue("daily_blocks_for_date", DateTime.now().toString());
+    } else if (isSameDay(DateTime.parse(rawSettings['daily_blocks_for_date']),DateTime.now())){
+      dailyBlocks = rawSettings['daily_blocks'];
+    } else {
+      updateValue("daily_blocks_for_date", DateTime.now().toString());
+      updateValue("daily_blocks", 0);
     }
   }
 
@@ -124,6 +144,13 @@ class Settings extends ChangeNotifier{
       case 'workWindowEnd':
         workWindowEnd = value;
         await _db.updateDB("configuration", {"work_window_end": value}, '1 = ?', [1]);
+        break;
+      case 'daily_blocks_for_date':
+        await _db.updateDB("configuration", {"daily_blocks_for_date": value}, '1 = ?', [1]);
+        break;
+      case 'daily_blocks':
+        dailyBlocks = value;
+        await _db.updateDB("configuration", {"daily_blocks": value}, '1 = ?', [1]);
         break;
       default:
         throw Exception('Unknown variable name: $variableName');

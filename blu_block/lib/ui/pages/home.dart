@@ -1,6 +1,5 @@
 import 'package:BluBlock/classes/block_executor.dart';
 import 'package:BluBlock/ui/components/button.dart';
-import 'package:BluBlock/ui/pages/data_security.dart';
 import 'package:BluBlock/ui/pages/infos.dart';
 import 'package:BluBlock/ui/pages/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../classes/block_progress.dart';
+import '../../classes/settings.dart';
 import '../components/background.dart';
 import '../components/circular_progress_painter.dart';
 import 'list_page.dart';
@@ -42,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final blockExecutor = Provider.of<BlockExecutor>(context);
+    final settings = Provider.of<Settings>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("BluBlock"),
@@ -67,12 +68,6 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => InfoPage())
                 );
                 break;
-              case 'datasecurity':
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DataSecurity()),
-                );
-                break;
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -87,11 +82,7 @@ class _HomePageState extends State<HomePage> {
               const PopupMenuItem<String>(
                 value: 'notes',
                 child: Text('Hinweise'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'datasecurity',
-                child: Text('Datenschutz'),
-              ),
+              )
             ],
           ),
         ],
@@ -114,11 +105,52 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 20),
                 CircularProgressIndicatorWrapper(blockExecutor.getBlockActive()),
                 const SizedBox(height: 80,),
+                (!settings.instaLoggedIn && !settings.tiktokLoggedIn && !settings.xLoggedIn && !settings.facebookLoggedIn)?
                 CustomButton(
-                  text: (blockExecutor.getBlockActive()?"Blocken stoppen":"Blocken starten"),
+                  text: "Bei einer Plattform anmelden",
                   onClick: () => {
-                    blockExecutor.toggleBlockActive(),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SettingsPage()),
+                    )
                   }
+                )
+                :
+                Column(
+                  children: [
+                    if (settings.dailyBlocks < settings.maxBatchSize)
+                      CustomButton(
+                          text: (blockExecutor.getBlockActive()?"Blocken stoppen":"Blocken starten"),
+                          onClick: () => {
+                            blockExecutor.toggleBlockActive(),
+                          }
+                      ),
+                    if (settings.dailyBlocks >= settings.maxBatchSize)
+                      const Text(
+                        "Das tägliche Blocklimit wurde erreicht.\nKomme morgen wieder um fortzufahren.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    if (settings.lastFileRefresh.add(const Duration(days: 7)).isBefore(DateTime.now()))
+                      Column(
+                        children: [
+                          const Text(
+                            "Die letzte Aktualisierung der Listen\nist schon mehr als 7 Tage her.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          CustomButton(
+                            text: "Listen aktualisieren",
+                            onClick: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const SettingsPage()),
+                              )
+                            }
+                          )
+                        ],
+                      )
+                  ],
                 )
               ],
             ),

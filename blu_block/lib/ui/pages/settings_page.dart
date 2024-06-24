@@ -98,26 +98,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           DropdownComponent(defaultValue: settings.blockLevel)
                         ]
                       ),
-                      /*Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Arbeitszeit"),
-                          SizedBox(
-                            width: 110,
-                            child:Column(
-                              children: [
-                                TimePickerComponent(initialSeconds: settings.workWindowStart, variableName: "workWindowStart"),
-                                const Text("bis"),
-                                TimePickerComponent(initialSeconds: settings.workWindowEnd, variableName: "workWindowEnd"),
-                              ]
-                            )
-                          ),
-                        ],
-                      ),*/
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text("Paketgröße"),
+                          const Text("Tägliche Blocks je Plattform"),
                           SizedBox(
                             width: 110,
                             child:Column(
@@ -220,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   _startListRefresh() async {
-    DateTime lastTime = DateTime.tryParse((await _db.readDB("configuration", ["last_file_refresh"], "1 = ?", [1], "last_file_refresh ASC", 1))[0]["last_file_refresh"])!;
+    DateTime lastTime = Settings().lastFileRefresh;
     DateTime now = DateTime.now();
     if (now.isAfter(lastTime.add(const Duration(days: 1)))){
       ImportList importer = ImportList();
@@ -246,7 +230,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Navigator.push(
       // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: instaLoginLogic, platform: "instagram"))
+        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: instaLoginLogic, platform: "instagram", isLogin: !Settings().instaLoggedIn))
     );
   }
 
@@ -255,7 +239,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Navigator.push(
       // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: tiktokLoginLogic, platform: "tiktok"))
+        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: tiktokLoginLogic, platform: "tiktok", isLogin: !Settings().tiktokLoggedIn))
     );
   }
 }
