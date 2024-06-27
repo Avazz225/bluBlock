@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:BluBlock/helpers/cdn.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,7 +22,11 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'blublock_database3.db');
+    String databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'blublock_database3.db');
+    if (!await Directory(databasesPath).exists()) {
+      await Directory(databasesPath).create(recursive: true);
+    }
     return await openDatabase(
       path,
       version: 4,
