@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../js_logic/facebook_logic.dart';
 import '../components/pop_up.dart';
 
 class SettingsPage extends StatefulWidget  {
@@ -60,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text("Facebook"),
-                          CustomButton(text: (settings.facebookLoggedIn)?"Ausloggen":"Einloggen", onClick: _dummyFunction),
+                          CustomButton(text: (settings.facebookLoggedIn)?"Ausloggen":"Einloggen", onClick: _loginFacebook),
                         ],
                       ),
                       Row(
@@ -199,7 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
   _dummyFunction(){
     String title = "Noch nicht vorhanden";
-    String msg = "Diese Funktion steht bisher nur für Instagram bereit.";
+    String msg = "Diese Funktion steht bisher nur für Instagram und Facebook bereit.";
     showMessage(context, msg, title);
   }
 
@@ -240,6 +241,15 @@ class _SettingsPageState extends State<SettingsPage> {
       // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: tiktokLoginLogic, platform: "tiktok", isLogin: !Settings().tiktokLoggedIn))
+    );
+  }
+
+  _loginFacebook() async {
+    String initialUrl = (await Url().getPlatformUrl(1));
+    Navigator.push(
+      // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => LoginWebView(initialUrl: initialUrl, jsLogic: facebookLoginLogic, platform: "facebook", isLogin: !Settings().facebookLoggedIn))
     );
   }
 }

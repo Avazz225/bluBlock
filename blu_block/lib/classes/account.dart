@@ -1,6 +1,7 @@
 import 'package:BluBlock/classes/automated_web_view.dart';
 import 'package:BluBlock/classes/database.dart';
 import 'package:BluBlock/classes/url.dart';
+import 'package:BluBlock/js_logic/facebook_logic.dart';
 import 'package:BluBlock/js_logic/insta_logic.dart';
 import 'package:BluBlock/js_logic/tiktok_logic.dart';
 
@@ -48,6 +49,8 @@ class Account{
       return instaBlockLogic;
     } else if (platform == "tiktok"){
       return tiktokBlockLogic;
+    } else if (platform == "facebook"){
+      return facebookBlockLogic;
     }
     return "";
   }
