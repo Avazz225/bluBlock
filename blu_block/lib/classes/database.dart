@@ -29,14 +29,19 @@ class DatabaseHelper {
     }
     return await openDatabase(
       path,
-      version: 4,
+      version: 6,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
   }
 
   FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 4) {
+    await db.execute('''
+      UPDATE "configuration" SET cloudfront_url ="$CDN_URL" WHERE 1=1;
+      '''
+    );
+
+    if (oldVersion < 5) {
       await db.execute('''
       ALTER TABLE "configuration"
         ADD "daily_blocks" INTEGER NOT NULL DEFAULT 0;
@@ -46,11 +51,6 @@ class DatabaseHelper {
       await db.execute('''
       ALTER TABLE "configuration"
         ADD "daily_blocks_for_date" TEXT NOT NULL DEFAULT "never";
-      '''
-      );
-
-      await db.execute('''
-      UPDATE "configuration" SET cloudfront_url ="$CDN_URL" WHERE 1=1;
       '''
       );
     }
@@ -101,7 +101,9 @@ class DatabaseHelper {
         "insta_logged_in" INTEGER NOT NULL DEFAULT 0,
         "tiktok_logged_in" INTEGER NOT NULL DEFAULT 0,
         "x_logged_in" INTEGER NOT NULL DEFAULT 0,
-        "last_file_refresh" TEXT NOT NULL DEFAULT "never"
+        "last_file_refresh" TEXT NOT NULL DEFAULT "never",
+        "daily_blocks" INTEGER NOT NULL DEFAULT 0,
+        "daily_blocks_for_date" TEXT NOT NULL DEFAULT "never"
       );'''
     );
 
