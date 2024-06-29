@@ -4,7 +4,10 @@ import 'package:BluBlock/classes/url.dart';
 import 'package:BluBlock/js_logic/facebook_logic.dart';
 import 'package:BluBlock/js_logic/insta_logic.dart';
 import 'package:BluBlock/js_logic/tiktok_logic.dart';
+import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
+import '../ui/pages/automated_web_view_with_head.dart';
 import 'block_progress.dart';
 
 class Account{
@@ -22,8 +25,23 @@ class Account{
   Account(this.accountId, this.accountName, this.platformId, this.categoryId, this.blocked, this.ignored, this.attempt);
 
 
-  Future<bool> block() async {
-    bool blockResult = await AutomatedWebView(url: '${await(_getBaseUrl())}$accountId', jsActions: await _getBlockLogic()).performAutomatedActions();
+  Future<bool> block(BuildContext context) async {
+    bool blockResult = false;
+    if (platformId == 2){
+      blockResult = await AutomatedWebView(url: '${await(_getBaseUrl())}$accountId', jsActions: await _getBlockLogic()).performAutomatedActions();
+    } else {
+      String initialUrl = '${await(_getBaseUrl())}$accountId';
+      String logic = await _getBlockLogic();
+      blockResult = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => AutomatedWebViewWithHead(
+            initialUrl: initialUrl,
+            jsActions: logic,
+          ),
+        ),
+      );
+    }
+
     if (blockResult){
       _updateBlockState();
       progressTracker.updateBlockedCount(1);

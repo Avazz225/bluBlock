@@ -28,10 +28,10 @@ class BlockExecutor extends ChangeNotifier{
     await _settings.initialize();
   }
 
-  toggleBlockActive(){
+  toggleBlockActive(BuildContext context){
     _blockActive = !_blockActive;
     if (_blockActive){
-      blockScheduler();
+      blockScheduler(context);
     }
     notifyListeners();
   }
@@ -48,8 +48,7 @@ class BlockExecutor extends ChangeNotifier{
     return {'total_actions':_totalActions, 'succeeded':_succeededActions, 'percentage':(_succeededActions/_totalActions)};
   }
 
-  blockScheduler() async {
-    List<bool> loginStates = [_settings.facebookLoggedIn, _settings.instaLoggedIn, _settings.tiktokLoggedIn, _settings.xLoggedIn];
+  blockScheduler(BuildContext context) async {
     while(_blockActive){
       //block execution
       _getBatchSize();
@@ -62,26 +61,26 @@ class BlockExecutor extends ChangeNotifier{
         await _getNewList();
         //only execute blocks and get waitTime if account list is not empty
         if (_accounts.isNotEmpty){
-          await _executeBlocks();
+          await _executeBlocks(context);
           _getWaitTime();
           _accountOverview.initialize();
           _settings.updateValue("daily_blocks", _settings.dailyBlocks + _batchSize);
           await Future.delayed(Duration(seconds: _waitTimeSeconds));
         } else {
           // if account list is empty: stop execution (all accounts blocked)
-          toggleBlockActive();
+          toggleBlockActive(context);
         }
       } else {
         // daily blocklimit reached
-        toggleBlockActive();
+        toggleBlockActive(context);
       }
     }
   }
-  _executeBlocks() async {
+  _executeBlocks(BuildContext context) async {
     for (final account in _accounts){
       bool res = false;
       try{
-        res = await account.block();
+        res = await account.block(context);
       } catch (e) {
         res = false;
       }

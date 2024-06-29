@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                       CustomButton(
                           text: (blockExecutor.getBlockActive()?"Blocken stoppen":"Blocken starten"),
                           onClick: () => {
-                            blockExecutor.toggleBlockActive(),
+                            blockExecutor.toggleBlockActive(context),
                           }
                       ),
                     if (settings.dailyBlocks >= settings.maxBatchSize)
