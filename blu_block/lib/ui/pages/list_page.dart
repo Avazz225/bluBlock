@@ -11,9 +11,9 @@ class ListPage extends StatefulWidget  {
 }
 
 class _ListPageState extends State<ListPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List _filteredAccounts = [];
-  late var accounts = AccountOverview().getAccountList();
+  List accounts = [];
   int _selectedFilter = 0;
 
   @override
@@ -21,6 +21,11 @@ class _ListPageState extends State<ListPage> {
     super.initState();
     _searchController.addListener(_filterAccounts);
     _filteredAccounts = Provider.of<AccountOverview>(context, listen: false).getAccountList();
+    _initAccounts();
+  }
+
+  _initAccounts () async {
+    accounts = await AccountOverview().getAccountList();
   }
 
   void _filterAccounts() {
