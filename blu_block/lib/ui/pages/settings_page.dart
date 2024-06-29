@@ -118,10 +118,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                       fillColor: Colors.grey.withOpacity(.15) ,
                                       border: const OutlineInputBorder(),
                                     ),
+                                    onTapOutside: (e) {
+                                      int newValue = int.tryParse(maxBatchSizeController.text) ?? settings.maxBatchSize;
+                                      settings.updateValue('maxBatchSize', newValue);
+                                      FocusScope.of(context).unfocus();
+                                    },
                                     onEditingComplete: () {
                                       int newValue = int.tryParse(maxBatchSizeController.text) ?? settings.maxBatchSize;
                                       settings.updateValue('maxBatchSize', newValue);
-                                      FocusScope.of(context).unfocus(); // Schließt die Tastatur
+                                      FocusScope.of(context).unfocus();
                                     },
                                   ),
                                 ),
@@ -148,10 +153,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                     fillColor: Colors.grey.withOpacity(.15) ,
                                     border: const OutlineInputBorder(),
                                   ),
+                                  onTapOutside: (e) {
+                                    int newValue = int.tryParse(minWaitController.text) ?? settings.waitSecondsMin;
+                                    settings.updateValue('waitSecondsMin', newValue);
+                                    FocusScope.of(context).unfocus();
+                                  },
                                   onEditingComplete: () {
                                     int newValue = int.tryParse(minWaitController.text) ?? settings.waitSecondsMin;
                                     settings.updateValue('waitSecondsMin', newValue);
-                                    FocusScope.of(context).unfocus(); // Schließt die Tastatur
+                                    FocusScope.of(context).unfocus();
                                   },
                                 ),
                               ),
@@ -168,10 +178,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                     fillColor: Colors.grey.withOpacity(.15) ,
                                     border: const OutlineInputBorder(),
                                   ),
+                                  onTapOutside: (e) {
+                                    int newValue = int.tryParse(maxWaitController.text) ?? settings.waitSecondsMax;
+                                    settings.updateValue('waitSecondsMax', newValue);
+                                    FocusScope.of(context).unfocus();
+                                  },
                                   onEditingComplete: () {
                                     int newValue = int.tryParse(maxWaitController.text) ?? settings.waitSecondsMax;
                                     settings.updateValue('waitSecondsMax', newValue);
-                                    FocusScope.of(context).unfocus(); // Schließt die Tastatur
+                                    FocusScope.of(context).unfocus();
                                   },
                                 ),
                               ),
@@ -197,6 +212,7 @@ class _SettingsPageState extends State<SettingsPage> {
       )
     );
   }
+
   _dummyFunction(){
     String title = "Noch nicht vorhanden";
     String msg = "Diese Funktion steht bisher nur für Instagram bereit.";
