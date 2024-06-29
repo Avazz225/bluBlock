@@ -42,17 +42,23 @@ class DatabaseHelper {
     );
 
     if (oldVersion < 5) {
-      await db.execute('''
-      ALTER TABLE "configuration"
+      _upgradeWithCatch(db, '''
+        ALTER TABLE "configuration"
         ADD "daily_blocks" INTEGER NOT NULL DEFAULT 0;
-      '''
-      );
+      ''');
 
-      await db.execute('''
-      ALTER TABLE "configuration"
+      _upgradeWithCatch(db,'''
+        ALTER TABLE "configuration"
         ADD "daily_blocks_for_date" TEXT NOT NULL DEFAULT "never";
-      '''
-      );
+      ''');
+    }
+  }
+
+  _upgradeWithCatch(Database db, String command) async {
+    try{
+      await db.execute(command);
+    } catch (e) {
+      // ignore error
     }
   }
 
